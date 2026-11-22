@@ -5,7 +5,7 @@
 A cross-AI engineering Skill with one shared Core, nine professional modules, seven virtual roles and independently versioned platform adapters. Platforms are used separately; no AI-to-AI communication is required.
 
 ## Download packages
-Every installable platform adapter has its own matching ZIP and SHA-256 checksum. Native host formats receive additional target-specific archives where the host documents a distinct structure. The full source bundle is also packaged. See [package download index](dist/packages/INDEX.md) and [distribution contract](release/DISTRIBUTION.md). ZIPs are generated and committed by GitHub Actions after package changes.
+Every installable platform adapter has its own matching ZIP and SHA-256 checksum. Native host formats receive additional target-specific archives where the host documents a distinct structure. The full source bundle is also packaged. See [package download index](dist/packages/INDEX.md) and [distribution contract](release/DISTRIBUTION.md). ZIPs are generated and committed by GitHub Actions after package changes. Published npm packages are also distributed through the GitHub Packages npm registry; install with `npm install @wzh131213-dev/web-game-engineer-chatgpt --registry=https://npm.pkg.github.com` (replace the adapter name as needed). GitHub Packages visibility is set to Public by the publishing workflow where the connected GitHub permissions allow it.
 
 ## Platform adapters
 - **ChatGPT:** [portable package](packages/chatgpt/) · [plugin source](plugin-distribution/chatgpt/) · Experimental / NOT CERTIFIED.
