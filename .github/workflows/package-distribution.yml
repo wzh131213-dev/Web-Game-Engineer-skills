@@ -112,6 +112,17 @@ jobs:
           sha256sum "$claude_archive" > "$claude_archive.sha256"
           echo '| Claude Code plugin | 0.1.0-alpha | [web-game-engineer-claude-plugin-0.1.0-alpha.zip](web-game-engineer-claude-plugin-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-plugin-0.1.0-alpha.zip.sha256) |' >> "$index"
 
+          # Claude.ai Agent Skill ZIP: one skill folder with SKILL.md inside.
+          claude_ai_root="plugin-distribution/claude/claude-ai-skill"
+          claude_ai_archive="dist/packages/web-game-engineer-claude-skill-0.1.0-alpha.zip"
+          test -f "$claude_ai_root/web-game-engineer/SKILL.md"
+          rm -f "$claude_ai_archive" "$claude_ai_archive.sha256"
+          (cd "$claude_ai_root" && zip -X -qr "../../../$claude_ai_archive" web-game-engineer)
+          unzip -t "$claude_ai_archive" >/dev/null
+          unzip -Z1 "$claude_ai_archive" | grep -Fxq 'web-game-engineer/SKILL.md'
+          sha256sum "$claude_ai_archive" > "$claude_ai_archive.sha256"
+          echo '| Claude.ai Agent Skill | 0.1.0-alpha | [web-game-engineer-claude-skill-0.1.0-alpha.zip](web-game-engineer-claude-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+
       - name: Publish ZIPs and checksums to main
         shell: bash
         env:
