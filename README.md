@@ -9,7 +9,7 @@ Every installable Skill and platform adapter has its own matching ZIP and SHA-25
 
 ## Platform adapters
 - **ChatGPT:** [portable package](packages/chatgpt/) · [plugin source](plugin-distribution/chatgpt/) · Experimental / NOT CERTIFIED.
-- **Claude:** [portable package](packages/claude/) · [Claude Code plugin source](plugin-distribution/claude/) · Experimental / NOT CERTIFIED. Claude.ai Skills and Claude Code plugins are separate targets.
+- **Claude:** [portable package](packages/claude/) · [Claude.ai Skill and Claude Code plugin sources](plugin-distribution/claude/) · Experimental / NOT CERTIFIED. Claude.ai Skills and Claude Code plugins are separate targets with independent certification.
 - Gemini, DeepSeek, Qwen and Doubao remain planned/Experimental; each requires its own package and independent validation.
 
 ## Start
