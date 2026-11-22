@@ -49,8 +49,8 @@ jobs:
           TAG="${{ steps.verify.outputs.tag }}"
           VERSION="${{ steps.verify.outputs.version }}"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "::error::Release $TAG already exists; refusing to overwrite immutable release assets."
-            exit 1
+            echo "Release $TAG already exists; preserving immutable assets and skipping duplicate publication."
+            exit 0
           fi
           mapfile -t assets < "$RUNNER_TEMP/release-assets.txt"
           gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --target main \
