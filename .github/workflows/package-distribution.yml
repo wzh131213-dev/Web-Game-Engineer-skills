@@ -17,6 +17,10 @@ on:
       - '.github/workflows/package-distribution.yml'
   workflow_dispatch:
 
+concurrency:
+  group: package-distribution-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -99,29 +103,79 @@ jobs:
             "$full_version" "$(basename "$full_archive")" "$(basename "$full_archive")" \
             "$(basename "$full_archive")" >> "$index"
 
-          # Claude Code plugin archive: native manifest and skills stay at ZIP root.
+          # Claude Code plugin ZIP; native manifest and skills stay at the archive root.
           claude_root="plugin-distribution/claude"
           claude_archive="dist/packages/web-game-engineer-claude-plugin-0.1.0-alpha.zip"
           test -f "$claude_root/.claude-plugin/plugin.json"
           test -f "$claude_root/skills/web-game-engineer/SKILL.md"
           rm -f "$claude_archive" "$claude_archive.sha256"
-          (cd "$claude_root" && zip -X -qr "../../$claude_archive" .claude-plugin skills README.md INSTALL.md)
+          (cd "$claude_root" && zip -X -qr "$GITHUB_WORKSPACE/$claude_archive" .claude-plugin skills README.md INSTALL.md)
           unzip -t "$claude_archive" >/dev/null
           unzip -Z1 "$claude_archive" | grep -Fxq '.claude-plugin/plugin.json'
           unzip -Z1 "$claude_archive" | grep -Fxq 'skills/web-game-engineer/SKILL.md'
           sha256sum "$claude_archive" > "$claude_archive.sha256"
           echo '| Claude Code plugin | 0.1.0-alpha | [web-game-engineer-claude-plugin-0.1.0-alpha.zip](web-game-engineer-claude-plugin-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-plugin-0.1.0-alpha.zip.sha256) |' >> "$index"
 
-          # Claude.ai Agent Skill ZIP: one skill folder with SKILL.md inside.
+          # Claude.ai Agent Skill: top-level Skill folder.
           claude_ai_root="plugin-distribution/claude/claude-ai-skill"
           claude_ai_archive="dist/packages/web-game-engineer-claude-skill-0.1.0-alpha.zip"
           test -f "$claude_ai_root/web-game-engineer/SKILL.md"
           rm -f "$claude_ai_archive" "$claude_ai_archive.sha256"
-          (cd "$claude_ai_root" && zip -X -qr "../../../$claude_ai_archive" web-game-engineer)
+          (cd "$claude_ai_root" && zip -X -qr "$GITHUB_WORKSPACE/$claude_ai_archive" web-game-engineer)
           unzip -t "$claude_ai_archive" >/dev/null
           unzip -Z1 "$claude_ai_archive" | grep -Fxq 'web-game-engineer/SKILL.md'
           sha256sum "$claude_ai_archive" > "$claude_ai_archive.sha256"
           echo '| Claude.ai Agent Skill | 0.1.0-alpha | [web-game-engineer-claude-skill-0.1.0-alpha.zip](web-game-engineer-claude-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+
+          # Gemini Apps Skills requires SKILL.md in the ZIP main folder.
+          gemini_archive="dist/packages/web-game-engineer-gemini-skill-0.1.0-alpha.zip"
+          test -f packages/gemini/SKILL.md
+          rm -f "$gemini_archive" "$gemini_archive.sha256"
+          (cd packages/gemini && zip -X -q "$GITHUB_WORKSPACE/$gemini_archive" SKILL.md)
+          unzip -t "$gemini_archive" >/dev/null
+          unzip -Z1 "$gemini_archive" | grep -Fxq 'SKILL.md'
+          sha256sum "$gemini_archive" > "$gemini_archive.sha256"
+          echo '| Gemini Apps native Skill | 0.1.0-alpha | [web-game-engineer-gemini-skill-0.1.0-alpha.zip](web-game-engineer-gemini-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-gemini-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+
+          # Qwen Model Studio uses a ZIP with root-level SKILL.md.
+          qwen_agent_archive="dist/packages/web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip"
+          test -f packages/qwen/SKILL.md
+          rm -f "$qwen_agent_archive" "$qwen_agent_archive.sha256"
+          (cd packages/qwen && zip -X -q "$GITHUB_WORKSPACE/$qwen_agent_archive" SKILL.md)
+          unzip -t "$qwen_agent_archive" >/dev/null
+          unzip -Z1 "$qwen_agent_archive" | grep -Fxq 'SKILL.md'
+          sha256sum "$qwen_agent_archive" > "$qwen_agent_archive.sha256"
+          echo '| Qwen Model Studio Agent Skill | 0.1.0-alpha | [web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip](web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+
+          # Qwen Code uses a named directory with SKILL.md inside.
+          qwen_code_archive="dist/packages/web-game-engineer-qwen-code-skill-0.1.0-alpha.zip"
+          qwen_stage="$RUNNER_TEMP/qwen-web-game-engineer"
+          rm -rf "$qwen_stage"
+          mkdir -p "$qwen_stage/web-game-engineer"
+          cp packages/qwen/SKILL.md "$qwen_stage/web-game-engineer/SKILL.md"
+          rm -f "$qwen_code_archive" "$qwen_code_archive.sha256"
+          (cd "$qwen_stage" && zip -X -qr "$GITHUB_WORKSPACE/$qwen_code_archive" web-game-engineer)
+          unzip -t "$qwen_code_archive" >/dev/null
+          unzip -Z1 "$qwen_code_archive" | grep -Fxq 'web-game-engineer/SKILL.md'
+          sha256sum "$qwen_code_archive" > "$qwen_code_archive.sha256"
+          echo '| Qwen Code Agent Skill | 0.1.0-alpha | [web-game-engineer-qwen-code-skill-0.1.0-alpha.zip](web-game-engineer-qwen-code-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-qwen-code-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+
+          # DeepSeek and Doubao prompt-only ZIPs: prompt file at archive root, not a native Skill import.
+          deepseek_prompt_archive="dist/packages/web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip"
+          rm -f "$deepseek_prompt_archive" "$deepseek_prompt_archive.sha256"
+          (cd packages/deepseek && zip -X -q "$GITHUB_WORKSPACE/$deepseek_prompt_archive" SYSTEM_PROMPT.md)
+          unzip -t "$deepseek_prompt_archive" >/dev/null
+          unzip -Z1 "$deepseek_prompt_archive" | grep -Fxq 'SYSTEM_PROMPT.md'
+          sha256sum "$deepseek_prompt_archive" > "$deepseek_prompt_archive.sha256"
+          echo '| DeepSeek system prompt pack (portable, not native import) | 0.1.0-alpha | [web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip](web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip) | [checksum](web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip.sha256) |' >> "$index"
+
+          doubao_prompt_archive="dist/packages/web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip"
+          rm -f "$doubao_prompt_archive" "$doubao_prompt_archive.sha256"
+          (cd packages/doubao && zip -X -q "$GITHUB_WORKSPACE/$doubao_prompt_archive" SYSTEM_PROMPT.md)
+          unzip -t "$doubao_prompt_archive" >/dev/null
+          unzip -Z1 "$doubao_prompt_archive" | grep -Fxq 'SYSTEM_PROMPT.md'
+          sha256sum "$doubao_prompt_archive" > "$doubao_prompt_archive.sha256"
+          echo '| Doubao system prompt pack (portable, not native import) | 0.1.0-alpha | [web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip](web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip) | [checksum](web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip.sha256) |' >> "$index"
 
       - name: Publish ZIPs and checksums to main
         shell: bash
