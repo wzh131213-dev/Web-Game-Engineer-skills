@@ -1,0 +1,1 @@
+Before public distribution, repository owner must choose and approve a license. No license is assumed by this Alpha package. Third-party dependencies retain their own license obligations.

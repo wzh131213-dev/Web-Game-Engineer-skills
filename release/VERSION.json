@@ -1,0 +1,23 @@
+{
+  "product": "Web & Game Engineer",
+  "release": "0.1.0-alpha",
+  "channel": "alpha",
+  "core_version": "0.1.0-alpha",
+  "module_version": "0.1.0-alpha",
+  "adapters": {
+    "chatgpt": "0.1.0-alpha",
+    "claude": "0.1.0-alpha",
+    "gemini": "0.1.0-alpha",
+    "deepseek": "0.1.0-alpha",
+    "qwen": "0.1.0-alpha",
+    "doubao": "0.1.0-alpha"
+  },
+  "certification_status": {
+    "chatgpt": "NOT CERTIFIED",
+    "claude": "NOT CERTIFIED",
+    "gemini": "NOT CERTIFIED",
+    "deepseek": "NOT CERTIFIED",
+    "qwen": "NOT CERTIFIED",
+    "doubao": "NOT CERTIFIED"
+  }
+}
