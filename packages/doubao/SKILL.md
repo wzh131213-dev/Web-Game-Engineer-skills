@@ -1,6 +1,6 @@
 ---
 name: web-game-engineer
-description: "A portable DeepSeek system-instruction pack for safe, test-driven website and 2D/3D game engineering workflows."
+description: "A portable Doubao and Volcengine Ark engineering Skill for safe, test-driven website and 2D/3D game workflows."
 ---
 
 # Web & Game Engineer — Cross-platform engineering Skill
