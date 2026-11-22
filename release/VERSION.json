@@ -1,11 +1,11 @@
 {
   "product": "Web & Game Engineer",
-  "release": "0.1.1-alpha",
+  "release": "0.1.2-alpha",
   "channel": "alpha",
   "core_version": "0.1.0-alpha",
   "module_version": "0.1.0-alpha",
   "adapters": {
-    "chatgpt": "0.1.1-alpha",
+    "chatgpt": "0.1.2-alpha",
     "claude": "0.1.0-alpha",
     "gemini": "0.1.0-alpha",
     "deepseek": "0.1.0-alpha",

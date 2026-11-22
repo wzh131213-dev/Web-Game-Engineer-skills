@@ -1,0 +1,25 @@
+{
+  "product": "Web & Game Engineer",
+  "package_id": "web-game-engineer-chatgpt",
+  "package_version": "0.1.2-alpha",
+  "adapter_version": "0.1.2-alpha",
+  "core_version": "0.1.0-alpha",
+  "channel": "experimental",
+  "certification": "NOT CERTIFIED",
+  "distribution": "github-source-directory",
+  "files": [
+    "README.md",
+    "INSTALL.md",
+    "WEB_GAME_ENGINEER_CHATGPT.md",
+    "PACKAGE_MANIFEST.json"
+  ],
+  "zip_archive": "NOT GENERATED",
+  "sha256": "NOT GENERATED",
+  "tests": {
+    "total": 12,
+    "passed": 0,
+    "failed": 0,
+    "not_run": 12
+  },
+  "last_verified": null
+}

@@ -1,14 +1,14 @@
 {
   "adapter_id": "chatgpt",
   "name": "ChatGPT",
-  "adapter_version": "0.1.1-alpha",
+  "adapter_version": "0.1.2-alpha",
   "core_version": "0.1.0-alpha",
   "channel": "experimental",
   "certification": "NOT CERTIFIED",
   "supported_routes": [
-    "native-skills-if-visible-and-supported",
-    "project-instructions-and-knowledge-if-available",
-    "custom-gpt-instructions-and-knowledge-if-available",
+    "chatgpt-project-if-available",
+    "custom-gpt-if-available",
+    "native-skills-only-if-interface-supports-format",
     "current-conversation-session-scoped"
   ],
   "target_surfaces": [
@@ -26,5 +26,10 @@
     "failed": 0,
     "not_run": 12
   },
-  "last_verified": null
+  "last_verified": null,
+  "distribution": {
+    "source_directory": "packages/chatgpt",
+    "zip_archive": "NOT GENERATED",
+    "sha256": "NOT GENERATED"
+  }
 }
