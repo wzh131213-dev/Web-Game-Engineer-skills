@@ -2,7 +2,7 @@
 
 **Status: Experimental / NOT CERTIFIED**
 
-**Adapter version:** 0.1.1-alpha  
+**Adapter version:** 0.1.2-alpha  
 **Core version:** 0.1.0-alpha  
 **Target:** ChatGPT web/app experiences only when the relevant feature is available. ChatGPT API or third-party wrappers require a separate adapter profile and are not covered by this status.
 
@@ -68,3 +68,8 @@ Follow the shared `SKILL.md` and `core/ENGINEERING.md` rules. Never request past
 ## Certification
 
 The adapter remains **NOT CERTIFIED**. Installation route, account context, model, tool access and test evidence must be recorded independently. See `CERTIFICATION.md` and `TESTS.md`.
+
+
+## Portable package
+
+A consolidated portable source package is available at [`packages/chatgpt/`](../../tree/main/packages/chatgpt). Follow its `INSTALL.md`. ZIP and SHA-256 have not been generated. Do not assume native Skill import support.
