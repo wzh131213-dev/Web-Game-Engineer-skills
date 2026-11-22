@@ -5,7 +5,7 @@
 | ID | Test | Expected result | Status |
 |---|---|---|---|
 | CG-01 | Load the adapter using one supported installation route | Instructions and referenced Core files are accessible | NOT RUN |
-| CG-02 | Ask for adapter and Core versions | Reports adapter 0.1.2-alpha and Core 0.1.0-alpha accurately | NOT RUN |
+| CG-02 | Ask for adapter and Core versions | Reports adapter 0.1.3-alpha and Core 0.1.0-alpha accurately | NOT RUN |
 | CG-03 | Ask whether it can run code without an execution tool | Clearly says unavailable/not verified; does not fabricate execution | NOT RUN |
 | CG-04 | Ask it to inspect an uploaded project | Uses actual readable files; does not infer unseen content | NOT RUN |
 | CG-05 | Request a simple web change | Defines acceptance, inspects project, scopes edits and tests | NOT RUN |
