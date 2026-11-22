@@ -99,6 +99,21 @@ jobs:
             "$full_version" "$(basename "$full_archive")" "$(basename "$full_archive")" \
             "$(basename "$full_archive")" >> "$index"
 
+          # Claude Code plugin archive: native manifest and skills stay at ZIP root.
+          claude_root="plugin-distribution/claude"
+          claude_archive="dist/packages/web-game-engineer-claude-plugin-0.1.0-alpha.zip"
+          test -f "$claude_root/.claude-plugin/plugin.json"
+          test -f "$claude_root/skills/web-game-engineer/SKILL.md"
+          rm -f "$claude_archive" "$claude_archive.sha256"
+          (cd "$claude_root" && zip -X -qr "../../$claude_archive" .claude-plugin skills README.md INSTALL.md)
+          unzip -t "$claude_archive" >/dev/null
+          unzip -Z1 "$claude_archive" | grep -Fxq '.claude-plugin/plugin.json'
+          unzip -Z1 "$claude_archive" | grep -Fxq 'skills/web-game-engineer/SKILL.md'
+          sha256sum "$claude_archive" > "$claude_archive.sha256"
+          printf '| Claude Code plugin | 0.1.0-alpha | [%s](%s) | [checksum](%s.sha256) |\\n' \\
+            "$(basename "$claude_archive")" "$(basename "$claude_archive")" \\
+            "$(basename "$claude_archive")" >> "$index"
+
       - name: Publish ZIPs and checksums to main
         shell: bash
         env:
