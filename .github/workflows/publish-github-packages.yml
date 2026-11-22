@@ -1,0 +1,114 @@
+name: Publish npm packages to GitHub Packages
+
+on:
+  workflow_run:
+    workflows: ["Build and publish skill ZIP packages"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out packaged main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Set up Node.js and GitHub npm registry
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@wzh131213-dev'
+
+      - name: Build, validate and publish platform npm packages
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -d dist/packages
+          stage="$RUNNER_TEMP/github-packages"
+          rm -rf "$stage"
+          mkdir -p "$stage"
+
+          publish_package() {
+            local slug="$1" version="$2" description="$3"
+            shift 3
+            local dir="$stage/$slug"
+            mkdir -p "$dir"
+            local count=0
+            for pattern in "$@"; do
+              while IFS= read -r archive; do
+                [ -n "$archive" ] || continue
+                cp "$archive" "$dir/"
+                [ -f "$archive.sha256" ] && cp "$archive.sha256" "$dir/"
+                count=$((count + 1))
+              done < <(find dist/packages -maxdepth 1 -type f -name "$pattern" -name '*.zip' | sort)
+            done
+            if [ "$count" -eq 0 ]; then
+              echo "::error::No ZIP files found for $slug"
+              exit 1
+            fi
+            cat > "$dir/package.json" <<EOF
+          {
+            "name": "@wzh131213-dev/web-game-engineer-$slug",
+            "version": "$version",
+            "description": "$description",
+            "license": "UNLICENSED",
+            "repository": {
+              "type": "git",
+              "url": "https://github.com/wzh131213-dev/Web-Game-Engineer-skills.git"
+            },
+            "publishConfig": {
+              "registry": "https://npm.pkg.github.com"
+            },
+            "files": ["*.zip", "*.sha256", "README.md"]
+          }
+          EOF
+            cat > "$dir/README.md" <<EOF
+          # Web & Game Engineer — $slug
+
+          Official GitHub Packages distribution for the $slug adapter.
+
+          - Source repository: https://github.com/wzh131213-dev/Web-Game-Engineer-skills
+          - ZIP archives and SHA-256 sidecars are included in this npm package.
+          - Platform status: Experimental / NOT CERTIFIED. See the repository acceptance matrix before relying on host-specific capabilities.
+          - Download source ZIPs: https://github.com/wzh131213-dev/Web-Game-Engineer-skills/tree/main/dist/packages
+
+          Install metadata package:
+          `npm install @wzh131213-dev/web-game-engineer-$slug@$version --registry=https://npm.pkg.github.com`
+
+          This npm package is a distribution wrapper; it does not install or certify the Skill in the target AI host.
+          EOF
+            (cd "$dir" && npm pack --dry-run --json > pack-check.json)
+            node -e "const p=require('$dir/pack-check.json'); if(!p[0] || p[0].files.length < 3 || p[0].size > 250*1024*1024) process.exit(1)"
+            if npm view "@wzh131213-dev/web-game-engineer-$slug@$version" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+              echo "Already published: @wzh131213-dev/web-game-engineer-$slug@$version"
+            else
+              (cd "$dir" && npm publish --registry=https://npm.pkg.github.com)
+            fi
+            # Public visibility is explicitly authorized by the repository owner.
+            # GitHub's npm registry defaults newly published packages to private.
+            encoded="%40wzh131213-dev%2Fweb-game-engineer-$slug"
+            gh api --method PATCH "/user/packages/npm/$encoded/visibility" -f visibility=public
+            echo "Published and requested public visibility: $slug@$version"
+          }
+
+          publish_package chatgpt "$(jq -r '.package_version' packages/chatgpt/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for ChatGPT" 'web-game-engineer-chatgpt-*.zip'
+          publish_package claude "$(jq -r '.package_version' packages/claude/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for Claude" 'web-game-engineer-claude-*.zip'
+          publish_package gemini "$(jq -r '.package_version' packages/gemini/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for Gemini" 'web-game-engineer-gemini-*.zip'
+          publish_package deepseek "$(jq -r '.package_version' packages/deepseek/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for DeepSeek" 'web-game-engineer-deepseek-*.zip'
+          publish_package qwen "$(jq -r '.package_version' packages/qwen/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for Qwen" 'web-game-engineer-qwen-*.zip'
+          publish_package doubao "$(jq -r '.package_version' packages/doubao/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for Doubao" 'web-game-engineer-doubao-*.zip'
+          publish_package full "$(jq -r '.release' release/VERSION.json)" "Complete Web & Game Engineer source bundle" 'web-game-engineer-full-*.zip'
