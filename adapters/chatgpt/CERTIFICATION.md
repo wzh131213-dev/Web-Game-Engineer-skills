@@ -1,6 +1,6 @@
 # ChatGPT adapter certification record
 
-- Adapter version: 0.1.2-alpha
+- Adapter version: 0.1.3-alpha
 - Core version: 0.1.0-alpha
 - Channel: Experimental
 - Certification: **NOT CERTIFIED**
@@ -26,3 +26,5 @@ Do not change this status to PASS or formally compatible merely because the file
 - Portable source package: `packages/chatgpt/` (published to GitHub).
 - ZIP archive: NOT GENERATED.
 - SHA-256: NOT GENERATED.
+
+- Package archive: GENERATED / VALIDATED by GitHub Actions; checksum published under `dist/packages/`.
