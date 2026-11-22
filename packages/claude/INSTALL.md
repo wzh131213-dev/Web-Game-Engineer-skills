@@ -1,12 +1,10 @@
 # Install — Claude adapter
 
-This portable adapter ZIP is a source/instruction package. For Claude Code plugin installation, use the dedicated Claude plugin ZIP and follow `plugin-distribution/claude/INSTALL.md`.
+This adapter provides two separate target packages:
 
-For Claude.ai, use only a Skills or Project import route actually exposed by the account. Do not treat this portable source ZIP as proof of native import compatibility.
+- Claude.ai Agent Skills ZIP: `web-game-engineer-claude-skill-0.1.0-alpha.zip`.
+- Claude Code plugin ZIP: `web-game-engineer-claude-plugin-0.1.0-alpha.zip`.
 
-1. Read `SKILL.md`.
-2. Add it through a supported Claude Project/custom instruction/Skills workflow, if available.
-3. Run the smoke checks in `TESTS.md` where included in the full repository.
-4. Record the host, model, tools, test results, and any limitations.
+Download the matching archive from `dist/packages/INDEX.md` and follow `plugin-distribution/claude/INSTALL.md`. Do not treat one host's installation as proof of compatibility with the other.
 
-Status remains Experimental / NOT CERTIFIED until target-host installation and acceptance tests are completed.
+Status remains Experimental / NOT CERTIFIED until each target host is independently installed and tested.
