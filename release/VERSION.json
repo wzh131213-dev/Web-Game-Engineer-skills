@@ -1,25 +1,28 @@
 {
   "product": "Web & Game Engineer",
-  "release": "0.1.3-alpha",
+  "release": "0.2.0-alpha",
+  "release_tag": "v0.2.0-alpha-platform-bundle-20261123",
   "channel": "alpha",
-  "core_version": "0.1.0-alpha",
-  "module_version": "0.1.0-alpha",
+  "core_version": "0.2.0-alpha",
+  "module_version": "0.2.0-alpha",
   "adapters": {
-    "chatgpt": "0.1.3-alpha",
-    "claude": "0.1.0-alpha",
-    "gemini": "0.1.0-alpha",
-    "deepseek": "0.1.0-alpha",
-    "qwen": "0.1.0-alpha",
-    "doubao": "0.1.0-alpha"
+    "chatgpt": "0.2.0-alpha",
+    "claude": "0.2.0-alpha",
+    "gemini": "0.2.0-alpha",
+    "deepseek": "0.2.0-alpha",
+    "qwen": "0.2.0-alpha",
+    "doubao": "0.2.0-alpha"
   },
   "targets": {
-    "gemini-apps-skills": "0.1.0-alpha",
-    "deepseek-chat-prompt": "0.1.0-alpha",
-    "deepseek-api-system-instructions": "0.1.0-alpha",
-    "qwen-code-skills": "0.1.0-alpha",
-    "qwen-model-studio-agent-skills": "0.1.0-alpha",
-    "doubao-chat-prompt": "0.1.0-alpha",
-    "volcengine-ark-api": "0.1.0-alpha"
+    "claude-code-plugin": "0.2.0-alpha",
+    "claude-ai-skill": "0.2.0-alpha",
+    "gemini-apps-skills": "0.2.0-alpha",
+    "deepseek-chat-prompt": "0.2.0-alpha",
+    "deepseek-api-system-instructions": "0.2.0-alpha",
+    "qwen-code-skills": "0.2.0-alpha",
+    "qwen-model-studio-agent-skills": "0.2.0-alpha",
+    "doubao-chat-prompt": "0.2.0-alpha",
+    "volcengine-ark-api": "0.2.0-alpha"
   },
   "certification_status": {
     "chatgpt": "NOT CERTIFIED",

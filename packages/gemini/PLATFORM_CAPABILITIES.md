@@ -1,10 +1,3 @@
-# Gemini target capability notes
+# Gemini Apps capability notes — 0.2.0-alpha
 
-- Native target implemented: Gemini Apps Skills import, using root-level SKILL.md in the ZIP.
-- Supported workflow described by official help: create/upload a SKILL.md, folder, or ZIP with SKILL.md in its main folder; review and create the Skill.
-- Account limitations: Skills availability is gated by account eligibility, age and rollout. The active Google account and current UI must be checked by the user.
-- This package contains instructions only. It does not grant tools or run scripts. Gemini Apps Skill scripts requiring internet access are not assumed.
-- Gemini API usage is NOT the same as Gemini Apps Skills and is not included as a separate API integration.
-- Installation state: NOT RUN. Acceptance suite: NOT RUN. Certification: NOT CERTIFIED.
-
-Official reference: https://support.google.com/gemini/answer/17094296
+This package targets Gemini Apps Skills import only where the feature is enabled for the account. It does not grant filesystem, shell, code execution, external APIs or asset services. Verify current account UI and execute the one-sentence web/game benchmark after installation. API/AI Studio are different targets. Status: Experimental / NOT CERTIFIED.

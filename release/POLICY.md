@@ -1,29 +1,16 @@
 # Version, release, certification and package distribution
 
-Core, each Module, each Adapter and each installable Skill package have independent versions. Stable, Beta and Experimental are distinct. GitHub is the official source.
+The current release is 0.2.0-alpha. Core, modules and all six platform adapters are versioned independently, but are aligned for this alpha milestone. GitHub is the official source; the unified GitHub Release is the primary six-platform download route.
+
+## One-sentence product contract
+Each shipped platform entry point must include the One-Sentence Build Mode. A sentence is treated as a complete creative brief; non-blocking details are inferred; implementation produces a complete runnable first version/playable vertical slice where host tools permit. The target is polished independent web/game quality, not an AAA guarantee.
 
 ## Mandatory ZIP rule
-
-**Every distributable Skill or platform adapter must have its own ZIP archive.** This applies equally to ChatGPT, Claude, Gemini, DeepSeek, Qwen, Doubao and every future platform or standalone Skill package. No platform receives a ZIP-only exception or a folder-only exception.
-
-- Each package lives in its own `packages/<package-id>/` directory.
-- Each package must include `PACKAGE_MANIFEST.json`, install/use instructions, the complete files required for that package, its package version and certification status.
-- The automated distribution workflow builds one ZIP per package using the name `<package_id>-<package_version>.zip`.
-- A SHA-256 sidecar file is generated for every ZIP.
-- A full-source ZIP is also generated for the overall product release.
-- Every archive is tested with `unzip -t`; manifest-listed files are checked before packaging.
-- Generated archives, checksums and a download index are committed under `dist/packages/` on `main`, so they remain visible in the repository rather than existing only as temporary workflow artifacts.
-- A package is not considered distributable if its manifest is missing, a required file is missing, ZIP validation fails or its checksum is absent.
-- Never claim an archive is ready until the workflow has completed and the actual ZIP and checksum files have been read back from GitHub.
-
-Platform adapter documentation outside `packages/` is design/source documentation, not a completed installable distribution package. Before calling a platform package released, create its independent `packages/<platform>/` directory and manifest; the workflow will then produce its matching ZIP.
+Every distributable adapter must have its own matching ZIP and SHA-256 sidecar. Each package contains its manifest, install/use instructions and every file listed by its manifest. A full-source ZIP is also generated. Archives must pass unzip validation; a missing manifest, required file, archive or checksum is a distribution failure.
 
 ## Release and certification
+All six adapters remain Experimental / NOT CERTIFIED until actual host installation, capability detection, benchmark, project handoff, security, regression and delivery tests pass independently. A generated ZIP proves package integrity only—not native import, runtime compatibility, quality score or certification.
 
-Certification levels: L1 basic guidance; L2 instruction-led/manual execution; L3 main tools work with some manual steps; L4 full workflow tools. L1-L2 remain Experimental. L3-L4 may apply for certification but do not automatically pass.
+L1-L2 manual/instruction-led capabilities remain Experimental. L3-L4 may qualify for certification but are not automatic passes. Revalidate at least every 90 days and after major host/tool changes or severe defects. Suspend certification for confirmed severe security/data-integrity issues.
 
-Each platform independently passes actual installation, capability detection, benchmarks, project handoff, security, regression and delivery tests. Revalidate at least every 90 days and after major host/tool changes or severe defects. Suspend affected certification for confirmed severe security/data-integrity issues.
-
-Build adapters concurrently where possible; isolate failures. Unfinished platforms may receive Experimental packages but must not be called formally compatible. A ZIP archive proves only that a source package was packaged and validated; it does not prove installation, runtime compatibility or certification.
-
-Public Stable releases, deployment and external publication still require user approval. The package ZIP generation workflow only writes package archives and checksums to this repository's `main` branch.
+Public Stable releases, external uploads and deployment require user approval. Do not claim AAA quality, platform compatibility or runtime success without direct evidence.

@@ -1,70 +1,51 @@
 # Architecture / 系统架构
 
-Web & Game Engineer is designed as a layered engineering system: shared standards at the center, capability modules around the Core, and independent adapters at the platform boundary.
+Web & Game Engineer is a layered cross-platform engineering workflow: one shared Core, nine task-focused modules, seven role perspectives, six independently maintained adapters, portable project state and evidence-based release gates.
 
-Web & Game Engineer 采用分层工程架构：核心层统一标准，能力层提供专业模块，平台边界层负责独立适配。
+Web & Game Engineer 采用分层跨平台工程体系：统一 Core、九大任务模块、七个专业角色视角、六个独立适配器、可移植项目状态和证据驱动的发布门禁。
 
-## 1. Architecture principles / 架构原则
-- **One Core, multiple adapters:** common workflows are defined once; host-specific behavior stays in adapters. / 一个核心、多个适配器：通用流程统一定义，宿主差异留在适配层。
-- **Modular by relevance:** load only the modules required by the task. / 按需加载：只加载任务所需模块。
-- **Explicit boundaries:** do not assume identical tools, permissions, memory or execution environments across AI products. / 边界明确：不假设不同 AI 产品拥有相同工具、权限、记忆或执行环境。
-- **Project files are authoritative:** portable project state is the cross-platform source of truth. / 项目文件为准：可移植项目状态是跨平台事实来源。
-- **Evidence-driven delivery:** test claims must match the checks actually executed. / 证据驱动交付：测试结论必须对应真实执行过的检查。
-
-## 2. Logical layers / 逻辑分层
+## Architecture layers / 架构分层
 
 | Layer | Responsibility / 职责 |
 |---|---|
-| Shared Core | Engineering principles, workflow, safety gates, quality standards and delivery contract. / 工程原则、工作流、安全门禁、质量标准与交付约定。 |
-| Professional Modules | Nine task-focused capability areas. / 九个面向任务的专业能力模块。 |
-| Platform Adapters | Installation guidance, host capability detection, prompt/Skill/plugin packaging and host-specific limitations. / 安装说明、宿主能力检测、提示词/Skill/插件打包及平台限制。 |
-| Project State | Versioned project metadata, architecture, tasks, logs, test reports and handoff files. / 版本化项目元数据、架构、任务、日志、测试报告与交接文件。 |
-| Quality & Release | Acceptance matrix, archive validation, checksums, release automation and certification records. / 验收矩阵、压缩包校验、哈希、发布自动化与认证记录。 |
+| Shared Core | Common rules, one-sentence build mode, quality target, safety gates and delivery contract. / 统一规范、一句话构建模式、质量目标、安全门禁与交付约定。 |
+| Specialist Modules | Web, 2D, 3D, workbench, physics, animation, AI logic, QA and deployment. / Web、2D、3D、工作台、物理、动画、AI 逻辑、测试与部署。 |
+| Role Reviews | Project/Game Director, Architect, Web, Game, Physics, Technical Artist and QA. / 七个专业职责审查视角。 |
+| Platform Adapters | ChatGPT, Claude, Gemini, DeepSeek, Qwen and Doubao entry points and host limits. / 六个平台入口和宿主能力边界。 |
+| Project State | Versioned context, architecture, tasks, logs, tests, issues and handoff. / 版本化上下文、架构、任务、日志、测试、问题与交接。 |
+| Quality & Release | Benchmarks, acceptance matrix, ZIP validation, SHA-256 and release automation. / 基准测试、验收矩阵、ZIP 校验、SHA-256 与发布自动化。 |
 
-## 3. Engineering lifecycle / 工程生命周期
-`Requirements → Inspect → Architect → Plan → Implement → Test → Repair → Optimize → Deliver`
+## One-sentence build pipeline / 一句话构建流水线
 
-1. **Requirements:** define outcomes, constraints and acceptance criteria. / 明确目标、约束与验收标准。
-2. **Inspection:** inspect existing files, dependencies, assets, entry points and tests. / 检查现有文件、依赖、资源、入口和测试。
-3. **Architecture:** define module boundaries, data flow, interfaces and rollback strategy. / 定义模块边界、数据流、接口与回滚策略。
-4. **Planning:** split work into small, verifiable tasks. / 拆分为小型、可验证任务。
-5. **Implementation:** make scoped changes and preserve existing behavior. / 局部实现并保护既有行为。
-6. **Testing:** run applicable static, automated and runtime checks. / 执行适用的静态、自动化和运行时检查。
-7. **Repair:** fix root causes with bounded retries. / 限次修复根因。
-8. **Optimization:** measure before tuning performance or visual fidelity. / 先测量，再优化性能与视觉效果。
-9. **Delivery:** package source, instructions, test evidence, known issues and version details. / 交付源码、说明、测试证据、已知问题与版本信息。
+`One sentence → intent extraction → safe defaults → module selection → architecture → complete vertical slice → tests → bounded repair → quality review → runnable delivery`
 
-## 4. Platform adapter boundary / 平台适配边界
-Each platform adapter owns its supported host products and entry points, installation/import instructions, capability and permission assumptions, fallback routes, limitations, tests, version and certification status.
+A one-sentence brief is enough to begin. The workflow infers non-blocking details rather than requiring a long requirements form. It builds a complete first version when tools permit, not a plan-only response. Every platform adapter embeds this workflow in its shipped entry point.
 
-每个适配器分别负责宿主产品与入口、安装/导入说明、能力与权限假设、降级路线、限制、测试、版本和认证状态。
+一句话即可启动开发。工作流会自动补全非阻塞细节，而非要求用户填写长规格。宿主工具允许时直接构建完整首版，而不是只返回计划。各平台适配器均在实际打包的入口文件中内置这一流程。
 
-Claude.ai Skills and Claude Code plugins are distinct targets. DeepSeek chat prompts and API instructions are distinct routes. Qwen Code and Model Studio Agent Skills are distinct targets. Doubao chat prompts and Volcengine Ark API instructions are distinct routes.
+## Mid-to-upper-tier quality definition / 中上游质量定义
 
-Claude.ai Skills 与 Claude Code 插件是不同目标；DeepSeek 对话提示词与 API 指令是不同路线；Qwen Code 与 Model Studio Agent Skills 分别适配；豆包对话提示词与火山引擎 Ark API 指令也分别处理。
+The target is a polished independent web product or browser/indie-game vertical slice, not an AAA guarantee. Review functional completeness, game feel/interactions, visual direction, stability/measured performance, responsive/accessibility/input and maintainability/testability. Target 4/5 on an evidence-based rubric; unknown metrics remain NOT MEASURED.
 
-No platform inherits another platform's certification. A package archive is not proof of host compatibility.
+目标是专业完整的独立 Web 产品或浏览器/独立游戏垂直切片，不承诺 AAA。评估功能完整性、手感/交互、视觉方向、稳定性/实测性能、响应式/无障碍/输入及可维护性/可测试性。以有证据的 4/5 为目标，未知指标标为未测量。
 
-平台之间不得继承认证结果。压缩包可用不等于宿主兼容。
+## Platform boundaries / 平台边界
 
-## 5. Technology policy / 技术选型策略
-- Web: HTML5, CSS, JavaScript/TypeScript. / Web：HTML5、CSS、JavaScript/TypeScript。
-- 2D: Canvas, WebGL or a suitable framework. / 2D：Canvas、WebGL 或合适框架。
-- 3D: Three.js as a practical baseline; WebGPU is optional. / 3D：以 Three.js 为实用基线，WebGPU 为可选项。
-- Physics: Rapier can provide primitives behind project-specific interfaces. / 物理：可通过项目专属接口封装 Rapier 等基础能力。
-- Assets: prefer portable GLTF/GLB and explicit resource lifecycle management. / 资产：优先使用可移植 GLTF/GLB，并明确资源生命周期。
-- Dependencies: avoid adding heavy dependencies without a measurable need. / 依赖：没有可衡量的必要性时避免引入重型依赖。
+Each adapter separately documents supported product surfaces, installation, tool capabilities, permissions, fallback paths, known limitations and certification. A Skill/prompt does not grant terminal, browser, API, file or device access. Claude.ai and Claude Code are separate targets; DeepSeek/Doubao prompt and API paths are not interchangeable; Qwen Code and Model Studio targets are separate.
 
-## 6. Project state and handoff / 项目状态与交接
-Portable project files should record project identity, schema version, goals, approved decisions, architecture, task status, development log, test report, known issues and handoff notes.
+每个适配器独立说明宿主产品、安装方式、工具能力、权限、降级方案、限制和认证。Skill/提示词不会授予终端、浏览器、API、文件或真机权限。Claude.ai 与 Claude Code 是不同目标；DeepSeek/豆包提示词与 API 路线不可混为一谈；Qwen Code 和 Model Studio 也是不同目标。
 
-可移植项目文件应记录项目身份、Schema 版本、目标、已批准决策、架构、任务状态、开发日志、测试报告、已知问题与交接说明。
+## Technology baseline / 技术基线
 
-See [Project State Schema](../schemas/PROJECT_STATE.md).
+- Web: HTML5/CSS/JS/TS.
+- 2D: Canvas/WebGL or suitable framework.
+- 3D: Three.js baseline; WebGPU optional.
+- Physics: modular interfaces; Rapier may supply primitives.
+- Assets: editable procedural assets and licensed GLTF/GLB.
+- Avoid unnecessary dependencies, paid services and proprietary asset copying.
 
-## 7. Release integrity / 发布完整性
-Each installable package has a manifest, a matching ZIP and a SHA-256 sidecar. GitHub Actions validates archive structure before publishing. The acceptance matrix remains the authority for host testing and certification.
+## Project state and release integrity / 项目状态与发布完整性
 
-每个可安装包均有 Manifest、对应 ZIP 与 SHA-256 校验文件。GitHub Actions 在发布前验证压缩包结构。宿主测试与认证状态以验收矩阵为准。
+Project files are the cross-platform source of truth. Every package has a manifest, its own ZIP and SHA-256 sidecar. A valid archive proves packaging only—not native import, runtime performance or certification.
 
-See [Distribution Contract](../release/DISTRIBUTION.md) and [Acceptance Matrix](../release/acceptance-matrix.csv).
+项目文件是跨平台事实来源。每个安装包均有 Manifest、独立 ZIP 和 SHA-256 文件。压缩包校验通过只证明打包完整，不证明原生导入、运行性能或平台认证。

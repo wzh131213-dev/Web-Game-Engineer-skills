@@ -1,10 +1,9 @@
 # Install — Claude adapter
 
-This adapter provides two separate target packages:
+**Version:** 0.2.0-alpha · Experimental / NOT CERTIFIED.
 
-- Claude.ai Agent Skills ZIP: `web-game-engineer-claude-skill-0.1.0-alpha.zip`.
-- Claude Code plugin ZIP: `web-game-engineer-claude-plugin-0.1.0-alpha.zip`.
+Separate host targets:
+- Claude.ai Agent Skill ZIP: `web-game-engineer-claude-skill-0.2.0-alpha.zip`.
+- Claude Code plugin ZIP: `web-game-engineer-claude-plugin-0.2.0-alpha.zip`.
 
-Download the matching archive from `dist/packages/INDEX.md` and follow `plugin-distribution/claude/INSTALL.md`. Do not treat one host's installation as proof of compatibility with the other.
-
-Status remains Experimental / NOT CERTIFIED until each target host is independently installed and tested.
+Download the matching target archive from the unified [GitHub Release](https://github.com/wzh131213-dev/Web-Game-Engineer-skills/releases/tag/v0.2.0-alpha-platform-bundle-20261123) and follow [plugin installation instructions](../../plugin-distribution/claude/INSTALL.md). Do not treat installation on one Claude product as proof of compatibility with the other.

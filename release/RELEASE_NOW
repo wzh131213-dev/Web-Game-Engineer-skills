@@ -1,3 +1,1 @@
-Create the initial six-platform unified prerelease. This marker is intentionally retained as an audit record.
-
-Retry after package artifacts are generated; checksum validation now uses repository-root paths.
+Publish the version and assets defined in release/VERSION.json after the package ZIP workflow succeeds.

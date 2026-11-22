@@ -1,80 +1,47 @@
 # Features & Modules / 功能与模块
 
-This document describes the product's intended engineering scope. A listed capability is a workflow area, not a claim that every host adapter has completed runtime certification.
+## One-Sentence Build Mode / 一句话构建模式
 
-本文介绍产品的工程能力范围。列出的能力代表工作流覆盖方向，不代表每个平台适配器都已完成运行时认证。
+One sentence is enough to start a new website or game. The shared Core fills safe missing details, selects relevant modules, builds a complete runnable first release/playable vertical slice, tests available flows and reports limitations. It does not require a long brief or questionnaire.
 
-## Nine professional modules / 九大专业模块
+一句话即可启动新网站或游戏开发。统一 Core 会补全安全的非关键细节、选择模块、构建完整可运行首版/可玩垂直切片、执行可用测试并报告限制，不要求长规格或问卷。
 
-### 01 — Web Development / Web 开发
-Responsive web interfaces, HTML/CSS/JS/TS, routing, forms, application state, browser storage, accessibility and integration.
+**Target quality:** polished independent web product or browser/indie-game vertical slice; not an AAA guarantee. Six evidence-based review dimensions target 4/5: completeness, interaction/feel, visual coherence, stability/performance, responsive/accessibility/input and maintainability/testability.
 
-响应式网页、HTML/CSS/JS/TS、路由、表单、应用状态、浏览器存储、无障碍与系统集成。
+**质量目标：** 专业完整的独立 Web 产品或浏览器/独立游戏切片，不承诺 AAA。六项有证据的评价目标为 4/5：功能完整性、交互手感、视觉一致性、稳定性/性能、响应式/无障碍/输入、可维护性/可测试性。
 
-### 02 — 2D Game Development / 2D 游戏开发
-Game loops, input systems, Canvas/WebGL rendering, animation, collision, maps, level flow, save systems and gameplay state.
+## Nine specialist modules / 九大专业模块
 
-游戏循环、输入系统、Canvas/WebGL 渲染、动画、碰撞、地图、关卡流程、存档与玩法状态。
+1. **Web Development / Web 开发:** responsive UI, information architecture, forms, routing, state, browser storage, accessibility and performance. Complete navigation and useful form/state flows are required.
+2. **2D Game Development / 2D 游戏:** game loop, controls, sprite/procedural rendering, animation, collision, map/level, progression, pause/restart and saves.
+3. **3D Game Development / 3D 游戏:** Three.js scene/camera/light/materials, terrain/geometry, models, collision, world boundaries, resource loading and cleanup.
+4. **3D Workbench / 3D 工作台:** add/select/transform/inspect objects, edit materials, manage assets, undo/redo where appropriate and export.
+5. **Physics Engine / 物理引擎:** physics core, vehicle/character/environment/destruction, units, timestep, collision/contact and stability.
+6. **Animation System / 动画系统:** skeletons, keyframes, state machines, blending, IK and event-driven transitions.
+7. **AI Game Logic / AI 游戏逻辑:** NPC state machines, behavior trees, pathfinding, perception, dialogue and quests; no fake remote AI.
+8. **Testing & Repair / 测试修复:** acceptance criteria, unit/integration/interaction/visual/performance/regression checks and bounded repair.
+9. **Deployment & Git / 部署与 Git:** builds, packaging, versioning, GitHub workflows, deployment and handoff—with approval gates.
 
-### 03 — 3D Game Development / 3D 游戏开发
-Three.js scene architecture, cameras, lighting, materials, models, terrain, world chunks, interaction and resource lifecycle.
+Modules load only when relevant. All modules must compose into one connected user experience, not a pile of disconnected screens or features.
 
-Three.js 场景架构、相机、光照、材质、模型、地形、世界分块、交互与资源生命周期。
+模块按需加载，最终必须组成完整连贯体验，而不是互不关联的页面或功能堆叠。
 
-### 04 — 3D Workbench / 3D 工作台
-Scene/object selection, transform controls, property inspection, terrain editing, asset management, skeleton workflows and export.
+## Seven professional roles / 七大专业角色
 
-场景/物体选择、变换控制、属性检查、地形编辑、资产管理、骨骼工作流与导出。
+- Project Manager / Game Director — product brief, scope and acceptance.
+- System Architect — stack, boundaries, state and interfaces.
+- Web Engineer — responsive web product and interactions.
+- Game Engineer — gameplay loop, controls and progression.
+- Physics Engineer — movement, collision and simulation stability.
+- Technical Artist — visual direction, assets, lighting and budgets.
+- QA Engineer — tests, regression and evidence-based quality review.
 
-### 05 — Physics Engine / 物理引擎
-Physics core, vehicle and character dynamics, contact and collision, environmental forces, stability and destruction-oriented simulation.
+七个角色是职责视角；宿主不支持多智能体时顺序执行，不宣称独立 Agent 始终运行。
 
-物理核心、载具与角色动力学、接触与碰撞、环境力、稳定性及破坏模拟。
+## Core behavior / 核心行为
 
-### 06 — Animation System / 动画系统
-Skeletons, keyframes, animation state machines, blending, inverse kinematics and event-driven animation.
-
-骨骼、关键帧、动画状态机、混合、逆向运动学与事件驱动动画。
-
-### 07 — AI Game Logic / AI 游戏逻辑
-NPC state machines, behavior trees, pathfinding, perception, dialogue, quests and gameplay decision logic.
-
-NPC 状态机、行为树、寻路、感知、对话、任务与玩法决策逻辑。
-
-### 08 — Testing & Repair / 测试与修复
-Unit, integration, interaction, visual, performance and regression tests; root-cause analysis and bounded repair attempts.
-
-单元、集成、交互、视觉、性能与回归测试；根因分析与有限次修复。
-
-### 09 — Deployment & Git / 部署与 Git
-Build pipelines, packaging, version control, GitHub automation, release preparation, deployment and handoff.
-
-构建流水线、打包、版本控制、GitHub 自动化、发布准备、部署与交接。
-
-## Seven virtual roles / 七大虚拟角色
-
-| Role / 角色 | Primary focus / 主要职责 |
-|---|---|
-| Project Manager / Game Director 项目经理 / 游戏总监 | Scope, priorities, milestones and acceptance criteria. / 范围、优先级、里程碑与验收标准。 |
-| System Architect 系统架构师 | Architecture, interfaces, data flow and technical risk. / 架构、接口、数据流与技术风险。 |
-| Web Engineer Web 工程师 | Browser UI, responsive behavior and web integration. / 浏览器界面、响应式行为与 Web 集成。 |
-| Game Engineer 游戏工程师 | Gameplay, controls, scenes and state transitions. / 玩法、控制、场景与状态转换。 |
-| Physics Engineer 物理工程师 | Forces, motion, collision and simulation stability. / 力、运动、碰撞与仿真稳定性。 |
-| Technical Artist 技术美术 | Assets, materials, lighting, animation and visual budgets. / 资产、材质、光照、动画与视觉预算。 |
-| QA Engineer 测试工程师 | Test coverage, regression, triage and release evidence. / 测试覆盖、回归、问题分级与发布证据。 |
-
-Roles are sequential perspectives when the host does not expose independent agents. The product does not claim that seven autonomous agents are always active.
-
-如果宿主没有独立 Agent 能力，角色将作为流程中的顺序审查视角，不宣称七个自治 Agent 始终并行运行。
-
-## Quality model / 质量模型
-- Correctness and data integrity first. / 正确性与数据完整性优先。
-- Stability and usability before visual polish. / 稳定性与可用性优先于视觉打磨。
-- Performance optimization based on measurements. / 基于测量数据进行性能优化。
-- Explicit PASS, FAIL, PARTIAL, NOT RUN and MANUAL states. / 明确区分通过、失败、部分通过、未运行与人工验证。
-- Regression checks after behavior-changing edits. / 行为变更后执行回归检查。
-
-## Module loading / 模块加载
-Modules are enabled by default but loaded only when relevant. Keep dependencies proportional to the project: simple websites do not require a 3D stack, and 2D projects should not inherit unrelated 3D physics.
-
-模块默认启用，但仅在任务相关时加载。依赖应与项目规模相称：简单网站不需要 3D 技术栈，2D 项目也不应继承无关的 3D 物理系统。
+- Build rather than only plan when actual tools permit. / 工具允许时直接构建，不止规划。
+- Complete primary user flows and core gameplay loops. / 完成主用户流程与核心玩法。
+- Make primary controls real and responsive. / 主要控制必须真实有效。
+- Preserve existing projects and test regressions. / 保护既有项目并做回归测试。
+- Report actual test evidence and unverified capabilities. / 如实报告测试证据与未验证能力。

@@ -14,6 +14,10 @@ on:
       - 'packages/**'
       - 'plugin-distribution/**'
       - 'release/**'
+      - 'benchmarks/**'
+      - 'docs/**'
+      - 'CONTRIBUTING.md'
+      - 'CHANGELOG.md'
       - '.github/workflows/package-distribution.yml'
   workflow_dispatch:
 
@@ -33,149 +37,108 @@ jobs:
         with:
           ref: main
 
-      - name: Validate packages and build ZIPs
+      - name: Validate packages and build all ZIPs
         shell: bash
         run: |
           set -euo pipefail
-          shopt -s nullglob
-          package_dirs=(packages/*/)
-          if [ "${#package_dirs[@]}" -eq 0 ]; then
-            echo "::error::No package directories found under packages/"
-            exit 1
-          fi
-
           mkdir -p dist/packages
           index="dist/packages/INDEX.md"
           {
             echo "# Downloadable Web & Game Engineer packages"
             echo
-            echo "Generated automatically from the package sources on main."
+            echo "Generated from package manifests on main. Each archive is independently validated."
             echo
             echo "| Package | Version | ZIP | SHA-256 |"
             echo "|---|---|---|---|"
           } > "$index"
 
+          shopt -s nullglob
+          package_dirs=(packages/*/)
+          test "${#package_dirs[@]}" -gt 0
           for package_dir in "${package_dirs[@]}"; do
             package_dir="${package_dir%/}"
             manifest="$package_dir/PACKAGE_MANIFEST.json"
-            if [ ! -f "$manifest" ]; then
-              echo "::error::Missing $manifest. Every distributable skill must have a package manifest."
-              exit 1
-            fi
-
+            test -f "$manifest"
             package_id="$(jq -r '.package_id // empty' "$manifest")"
             package_version="$(jq -r '.package_version // empty' "$manifest")"
-            if [ -z "$package_id" ] || [ -z "$package_version" ]; then
-              echo "::error::package_id and package_version are required in $manifest"
-              exit 1
-            fi
-
+            test -n "$package_id" && test -n "$package_version"
             while IFS= read -r relative_file; do
               [ -n "$relative_file" ] || continue
-              if [ ! -f "$package_dir/$relative_file" ]; then
-                echo "::error::Manifest file missing: $package_dir/$relative_file"
-                exit 1
-              fi
+              test -f "$package_dir/$relative_file" || { echo "::error::Missing $package_dir/$relative_file"; exit 1; }
             done < <(jq -r '.files[]?' "$manifest")
-
             archive="dist/packages/${package_id}-${package_version}.zip"
             rm -f "$archive" "$archive.sha256"
             zip -X -qr "$archive" "$package_dir"
             unzip -t "$archive" >/dev/null
             sha256sum "$archive" > "$archive.sha256"
-            printf '| %s | %s | [%s](%s) | [checksum](%s.sha256) |\n' \
-              "$package_id" "$package_version" "$(basename "$archive")" \
-              "$(basename "$archive")" "$(basename "$archive")" >> "$index"
-            echo "Built and validated $archive"
+            printf '| %s | %s | [%s](%s) | [checksum](%s.sha256) |\n' "$package_id" "$package_version" "$(basename "$archive")" "$(basename "$archive")" "$(basename "$archive")" >> "$index"
           done
 
-          full_version="$(jq -r '.release // empty' release/VERSION.json)"
-          if [ -z "$full_version" ]; then
-            echo "::error::release field missing in release/VERSION.json"
-            exit 1
-          fi
-          full_archive="dist/packages/web-game-engineer-full-${full_version}.zip"
+          FULL_VERSION="$(jq -r '.release' release/VERSION.json)"
+          zip_files=(README.md SKILL.md core modules team schemas adapters packages plugin-distribution release benchmarks docs CONTRIBUTING.md CHANGELOG.md SECURITY.md LICENSE-CHOICE-REQUIRED.txt .github/workflows)
+          full_archive="dist/packages/web-game-engineer-full-${FULL_VERSION}.zip"
           rm -f "$full_archive" "$full_archive.sha256"
-          zip -X -qr "$full_archive" README.md SKILL.md core modules team schemas adapters packages plugin-distribution release .github/workflows
+          zip -X -qr "$full_archive" "${zip_files[@]}"
           unzip -t "$full_archive" >/dev/null
           sha256sum "$full_archive" > "$full_archive.sha256"
-          printf '| Full source bundle | %s | [%s](%s) | [checksum](%s.sha256) |\n' \
-            "$full_version" "$(basename "$full_archive")" "$(basename "$full_archive")" \
-            "$(basename "$full_archive")" >> "$index"
+          printf '| Full source bundle | %s | [%s](%s) | [checksum](%s.sha256) |\n' "$FULL_VERSION" "$(basename "$full_archive")" "$(basename "$full_archive")" "$(basename "$full_archive")" >> "$index"
 
-          # Claude Code plugin ZIP; native manifest and skills stay at the archive root.
-          claude_root="plugin-distribution/claude"
-          claude_archive="dist/packages/web-game-engineer-claude-plugin-0.1.0-alpha.zip"
-          test -f "$claude_root/.claude-plugin/plugin.json"
-          test -f "$claude_root/skills/web-game-engineer/SKILL.md"
-          rm -f "$claude_archive" "$claude_archive.sha256"
-          (cd "$claude_root" && zip -X -qr "$GITHUB_WORKSPACE/$claude_archive" .claude-plugin skills README.md INSTALL.md)
-          unzip -t "$claude_archive" >/dev/null
-          unzip -Z1 "$claude_archive" | grep -Fxq '.claude-plugin/plugin.json'
-          unzip -Z1 "$claude_archive" | grep -Fxq 'skills/web-game-engineer/SKILL.md'
-          sha256sum "$claude_archive" > "$claude_archive.sha256"
-          echo '| Claude Code plugin | 0.1.0-alpha | [web-game-engineer-claude-plugin-0.1.0-alpha.zip](web-game-engineer-claude-plugin-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-plugin-0.1.0-alpha.zip.sha256) |' >> "$index"
+          PLATFORM_VERSION="$(jq -r '.release' release/VERSION.json)"
+          # Claude Code plugin archive: plugin manifest and self-contained Skill at archive root.
+          root="plugin-distribution/claude"
+          archive="dist/packages/web-game-engineer-claude-plugin-${PLATFORM_VERSION}.zip"
+          test -f "$root/.claude-plugin/plugin.json" && test -f "$root/skills/web-game-engineer/SKILL.md"
+          rm -f "$archive" "$archive.sha256"
+          (cd "$root" && zip -X -qr "$GITHUB_WORKSPACE/$archive" .claude-plugin skills README.md INSTALL.md)
+          unzip -t "$archive" >/dev/null
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| Claude Code plugin | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
 
-          # Claude.ai Agent Skill: top-level Skill folder.
-          claude_ai_root="plugin-distribution/claude/claude-ai-skill"
-          claude_ai_archive="dist/packages/web-game-engineer-claude-skill-0.1.0-alpha.zip"
-          test -f "$claude_ai_root/web-game-engineer/SKILL.md"
-          rm -f "$claude_ai_archive" "$claude_ai_archive.sha256"
-          (cd "$claude_ai_root" && zip -X -qr "$GITHUB_WORKSPACE/$claude_ai_archive" web-game-engineer)
-          unzip -t "$claude_ai_archive" >/dev/null
-          unzip -Z1 "$claude_ai_archive" | grep -Fxq 'web-game-engineer/SKILL.md'
-          sha256sum "$claude_ai_archive" > "$claude_ai_archive.sha256"
-          echo '| Claude.ai Agent Skill | 0.1.0-alpha | [web-game-engineer-claude-skill-0.1.0-alpha.zip](web-game-engineer-claude-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+          # Claude.ai Agent Skill archive.
+          root="plugin-distribution/claude/claude-ai-skill"
+          archive="dist/packages/web-game-engineer-claude-skill-${PLATFORM_VERSION}.zip"
+          test -f "$root/web-game-engineer/SKILL.md"
+          rm -f "$archive" "$archive.sha256"
+          (cd "$root" && zip -X -qr "$GITHUB_WORKSPACE/$archive" web-game-engineer)
+          unzip -t "$archive" >/dev/null
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| Claude.ai Agent Skill | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
 
-          # Gemini Apps Skills requires SKILL.md in the ZIP main folder.
-          gemini_archive="dist/packages/web-game-engineer-gemini-skill-0.1.0-alpha.zip"
-          test -f packages/gemini/SKILL.md
-          rm -f "$gemini_archive" "$gemini_archive.sha256"
-          (cd packages/gemini && zip -X -q "$GITHUB_WORKSPACE/$gemini_archive" SKILL.md)
-          unzip -t "$gemini_archive" >/dev/null
-          unzip -Z1 "$gemini_archive" | grep -Fxq 'SKILL.md'
-          sha256sum "$gemini_archive" > "$gemini_archive.sha256"
-          echo '| Gemini Apps native Skill | 0.1.0-alpha | [web-game-engineer-gemini-skill-0.1.0-alpha.zip](web-game-engineer-gemini-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-gemini-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+          # Gemini Apps Skill: self-contained root-level SKILL.md.
+          archive="dist/packages/web-game-engineer-gemini-skill-${PLATFORM_VERSION}.zip"
+          rm -f "$archive" "$archive.sha256"
+          (cd packages/gemini && zip -X -q "$GITHUB_WORKSPACE/$archive" SKILL.md)
+          unzip -t "$archive" >/dev/null
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| Gemini Apps Skill | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
 
-          # Qwen Model Studio uses a ZIP with root-level SKILL.md.
-          qwen_agent_archive="dist/packages/web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip"
-          test -f packages/qwen/SKILL.md
-          rm -f "$qwen_agent_archive" "$qwen_agent_archive.sha256"
-          (cd packages/qwen && zip -X -q "$GITHUB_WORKSPACE/$qwen_agent_archive" SKILL.md)
-          unzip -t "$qwen_agent_archive" >/dev/null
-          unzip -Z1 "$qwen_agent_archive" | grep -Fxq 'SKILL.md'
-          sha256sum "$qwen_agent_archive" > "$qwen_agent_archive.sha256"
-          echo '| Qwen Model Studio Agent Skill | 0.1.0-alpha | [web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip](web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-qwen-agent-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+          # Qwen Model Studio root Skill and Qwen Code named Skill folder.
+          archive="dist/packages/web-game-engineer-qwen-agent-skill-${PLATFORM_VERSION}.zip"
+          rm -f "$archive" "$archive.sha256"
+          (cd packages/qwen && zip -X -q "$GITHUB_WORKSPACE/$archive" SKILL.md)
+          unzip -t "$archive" >/dev/null
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| Qwen Model Studio Agent Skill | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
 
-          # Qwen Code uses a named directory with SKILL.md inside.
-          qwen_code_archive="dist/packages/web-game-engineer-qwen-code-skill-0.1.0-alpha.zip"
-          qwen_stage="$RUNNER_TEMP/qwen-web-game-engineer"
-          rm -rf "$qwen_stage"
-          mkdir -p "$qwen_stage/web-game-engineer"
-          cp packages/qwen/SKILL.md "$qwen_stage/web-game-engineer/SKILL.md"
-          rm -f "$qwen_code_archive" "$qwen_code_archive.sha256"
-          (cd "$qwen_stage" && zip -X -qr "$GITHUB_WORKSPACE/$qwen_code_archive" web-game-engineer)
-          unzip -t "$qwen_code_archive" >/dev/null
-          unzip -Z1 "$qwen_code_archive" | grep -Fxq 'web-game-engineer/SKILL.md'
-          sha256sum "$qwen_code_archive" > "$qwen_code_archive.sha256"
-          echo '| Qwen Code Agent Skill | 0.1.0-alpha | [web-game-engineer-qwen-code-skill-0.1.0-alpha.zip](web-game-engineer-qwen-code-skill-0.1.0-alpha.zip) | [checksum](web-game-engineer-qwen-code-skill-0.1.0-alpha.zip.sha256) |' >> "$index"
+          archive="dist/packages/web-game-engineer-qwen-code-skill-${PLATFORM_VERSION}.zip"
+          stage="$RUNNER_TEMP/qwen-web-game-engineer"
+          rm -rf "$stage" && mkdir -p "$stage/web-game-engineer"
+          cp packages/qwen/SKILL.md "$stage/web-game-engineer/SKILL.md"
+          rm -f "$archive" "$archive.sha256"
+          (cd "$stage" && zip -X -qr "$GITHUB_WORKSPACE/$archive" web-game-engineer)
+          unzip -t "$archive" >/dev/null
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| Qwen Code Agent Skill | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
 
-          # DeepSeek and Doubao prompt-only ZIPs: prompt file at archive root, not a native Skill import.
-          deepseek_prompt_archive="dist/packages/web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip"
-          rm -f "$deepseek_prompt_archive" "$deepseek_prompt_archive.sha256"
-          (cd packages/deepseek && zip -X -q "$GITHUB_WORKSPACE/$deepseek_prompt_archive" SYSTEM_PROMPT.md)
-          unzip -t "$deepseek_prompt_archive" >/dev/null
-          unzip -Z1 "$deepseek_prompt_archive" | grep -Fxq 'SYSTEM_PROMPT.md'
-          sha256sum "$deepseek_prompt_archive" > "$deepseek_prompt_archive.sha256"
-          echo '| DeepSeek system prompt pack (portable, not native import) | 0.1.0-alpha | [web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip](web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip) | [checksum](web-game-engineer-deepseek-system-prompt-0.1.0-alpha.zip.sha256) |' >> "$index"
-
-          doubao_prompt_archive="dist/packages/web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip"
-          rm -f "$doubao_prompt_archive" "$doubao_prompt_archive.sha256"
-          (cd packages/doubao && zip -X -q "$GITHUB_WORKSPACE/$doubao_prompt_archive" SYSTEM_PROMPT.md)
-          unzip -t "$doubao_prompt_archive" >/dev/null
-          unzip -Z1 "$doubao_prompt_archive" | grep -Fxq 'SYSTEM_PROMPT.md'
-          sha256sum "$doubao_prompt_archive" > "$doubao_prompt_archive.sha256"
-          echo '| Doubao system prompt pack (portable, not native import) | 0.1.0-alpha | [web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip](web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip) | [checksum](web-game-engineer-doubao-system-prompt-0.1.0-alpha.zip.sha256) |' >> "$index"
+          # Portable prompt archives for DeepSeek and Doubao (not native Skill imports).
+          for platform in deepseek doubao; do
+            archive="dist/packages/web-game-engineer-${platform}-system-prompt-${PLATFORM_VERSION}.zip"
+            rm -f "$archive" "$archive.sha256"
+            (cd "packages/$platform" && zip -X -q "$GITHUB_WORKSPACE/$archive" SYSTEM_PROMPT.md)
+            unzip -t "$archive" >/dev/null
+            sha256sum "$archive" > "$archive.sha256"
+            echo "| $platform system prompt (portable) | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
+          done
 
       - name: Publish ZIPs and checksums to main
         shell: bash
@@ -186,9 +149,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dist/packages/
-          if git diff --cached --quiet; then
-            echo "No package archive changes to publish."
-            exit 0
-          fi
+          if git diff --cached --quiet; then echo "No package archive changes."; exit 0; fi
           git commit -m "chore: publish skill package ZIPs [skip ci]"
           git push origin HEAD:main

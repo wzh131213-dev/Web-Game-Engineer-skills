@@ -1,10 +1,10 @@
 name: Publish six-platform GitHub Release
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build and publish skill ZIP packages"]
+    types: [completed]
     branches: [main]
-    paths:
-      - "release/RELEASE_NOW"
   workflow_dispatch:
 
 permissions:
@@ -12,60 +12,47 @@ permissions:
 
 jobs:
   release:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
+      - name: Checkout packaged main
+        uses: actions/checkout@v7
         with:
           ref: main
 
-      - name: Verify six platform archives
+      - name: Verify all six platform ZIPs and checksums
+        id: verify
         shell: bash
         run: |
           set -euo pipefail
-          files=(
-            web-game-engineer-chatgpt-0.1.3-alpha.zip
-            web-game-engineer-claude-0.1.0-alpha.zip
-            web-game-engineer-gemini-0.1.0-alpha.zip
-            web-game-engineer-deepseek-0.1.0-alpha.zip
-            web-game-engineer-qwen-0.1.0-alpha.zip
-            web-game-engineer-doubao-0.1.0-alpha.zip
-          )
-          for file in "${files[@]}"; do
-            test -s "dist/packages/$file"
-            test -s "dist/packages/$file.sha256"
-            sha256sum -c "dist/packages/$file.sha256"
-            unzip -t "dist/packages/$file" >/dev/null
+          VERSION="$(jq -r '.release' release/VERSION.json)"
+          TAG="$(jq -r '.release_tag' release/VERSION.json)"
+          test -n "$VERSION" && test -n "$TAG"
+          platforms=(chatgpt claude gemini deepseek qwen doubao)
+          : > "$RUNNER_TEMP/release-assets.txt"
+          for platform in "${platforms[@]}"; do
+            archive="$(jq -r '.zip_archive' "packages/$platform/PACKAGE_MANIFEST.json")"
+            test -s "$archive" && test -s "$archive.sha256"
+            (cd "$(dirname "$archive")" && sha256sum -c "$(basename "$archive").sha256")
+            unzip -t "$archive" >/dev/null
+            printf '%s\n%s.sha256\n' "$archive" "$archive" >> "$RUNNER_TEMP/release-assets.txt"
           done
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
-      - name: Create one release with all six ZIPs
+      - name: Create immutable unified release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
-          TAG="v0.1.3-alpha-platform-bundle-20261122"
+          TAG="${{ steps.verify.outputs.tag }}"
+          VERSION="${{ steps.verify.outputs.version }}"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists; refusing to overwrite immutable release assets."
+            echo "::error::Release $TAG already exists; refusing to overwrite immutable release assets."
             exit 1
           fi
-          assets=(
-            dist/packages/web-game-engineer-chatgpt-0.1.3-alpha.zip
-            dist/packages/web-game-engineer-chatgpt-0.1.3-alpha.zip.sha256
-            dist/packages/web-game-engineer-claude-0.1.0-alpha.zip
-            dist/packages/web-game-engineer-claude-0.1.0-alpha.zip.sha256
-            dist/packages/web-game-engineer-gemini-0.1.0-alpha.zip
-            dist/packages/web-game-engineer-gemini-0.1.0-alpha.zip.sha256
-            dist/packages/web-game-engineer-deepseek-0.1.0-alpha.zip
-            dist/packages/web-game-engineer-deepseek-0.1.0-alpha.zip.sha256
-            dist/packages/web-game-engineer-qwen-0.1.0-alpha.zip
-            dist/packages/web-game-engineer-qwen-0.1.0-alpha.zip.sha256
-            dist/packages/web-game-engineer-doubao-0.1.0-alpha.zip
-            dist/packages/web-game-engineer-doubao-0.1.0-alpha.zip.sha256
-          )
-          gh release create "$TAG" "${assets[@]}" \
-            --repo "$GITHUB_REPOSITORY" \
-            --target main \
-            --title "Web & Game Engineer — 六平台统一安装包" \
-            --prerelease \
-            --notes "一次下载六个平台适配包：ChatGPT、Claude、Gemini、DeepSeek、Qwen、Doubao。每个 ZIP 均附 SHA-256 校验文件。各平台当前兼容状态以仓库 acceptance matrix 为准；尚未完成宿主实测的平台仍标记为 Experimental / NOT CERTIFIED。"
+          mapfile -t assets < "$RUNNER_TEMP/release-assets.txt"
+          gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --target main \
+            --title "Web & Game Engineer $VERSION — 六平台一句话构建版" --prerelease \
+            --notes "六个平台统一更新至 $VERSION。新增默认一句话建站/游戏构建模式，目标为专业中上游独立 Web/游戏首版，非 AAA 承诺。每个 ZIP 附 SHA-256。所有平台保持各自独立验收状态；未完成宿主验证的适配器仍为 Experimental / NOT CERTIFIED。"

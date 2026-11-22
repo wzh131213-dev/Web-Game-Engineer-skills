@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
   "name": "web-game-engineer",
-  "version": "0.1.3-alpha",
-  "description": "A modular engineering workflow for building websites, 2D and 3D games, physics systems, animation, AI game logic, testing and deployment.",
+  "version": "0.2.0-alpha",
+  "description": "One-sentence professional engineering workflow for complete websites, 2D/3D games, physics, animation, testing and delivery.",
   "author": "Web & Game Engineer",
   "skills": [
     "skills/web-game-engineer/SKILL.md"

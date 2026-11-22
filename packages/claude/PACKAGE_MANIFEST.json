@@ -1,9 +1,10 @@
 {
   "product": "Web & Game Engineer",
   "package_id": "web-game-engineer-claude",
-  "package_version": "0.1.0-alpha",
-  "adapter_version": "0.1.0-alpha",
-  "core_version": "0.1.0-alpha",
+  "package_version": "0.2.0-alpha",
+  "adapter_version": "0.2.0-alpha",
+  "core_version": "0.2.0-alpha",
+  "target": "Claude.ai Skills + Claude Code plugin (separate targets)",
   "channel": "experimental",
   "certification": "NOT CERTIFIED",
   "distribution": "individual-zip-committed-to-dist-packages-by-github-actions",
@@ -13,8 +14,8 @@
     "SKILL.md",
     "PACKAGE_MANIFEST.json"
   ],
-  "zip_archive": "dist/packages/web-game-engineer-claude-0.1.0-alpha.zip",
-  "sha256": "dist/packages/web-game-engineer-claude-0.1.0-alpha.zip.sha256",
+  "zip_archive": "dist/packages/web-game-engineer-claude-0.2.0-alpha.zip",
+  "sha256": "dist/packages/web-game-engineer-claude-0.2.0-alpha.zip.sha256",
   "tests": {
     "total": 10,
     "passed": 0,

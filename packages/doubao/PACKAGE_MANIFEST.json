@@ -1,11 +1,10 @@
 {
   "product": "Web & Game Engineer",
-  "platform": "doubao",
   "package_id": "web-game-engineer-doubao",
-  "package_version": "0.1.0-alpha",
-  "adapter_version": "0.1.0-alpha",
-  "core_version": "0.1.0-alpha",
-  "target": "Doubao chat portable prompt + Volcengine Ark system-message adapter",
+  "package_version": "0.2.0-alpha",
+  "adapter_version": "0.2.0-alpha",
+  "core_version": "0.2.0-alpha",
+  "target": "Doubao chat prompt + Volcengine Ark API system message",
   "channel": "experimental",
   "certification": "NOT CERTIFIED",
   "distribution": "individual-zip-committed-to-dist-packages-by-github-actions",
@@ -17,8 +16,8 @@
     "PLATFORM_CAPABILITIES.md",
     "PACKAGE_MANIFEST.json"
   ],
-  "zip_archive": "dist/packages/web-game-engineer-doubao-0.1.0-alpha.zip",
-  "sha256": "dist/packages/web-game-engineer-doubao-0.1.0-alpha.zip.sha256",
+  "zip_archive": "dist/packages/web-game-engineer-doubao-0.2.0-alpha.zip",
+  "sha256": "dist/packages/web-game-engineer-doubao-0.2.0-alpha.zip.sha256",
   "tests": {
     "total": 10,
     "passed": 0,

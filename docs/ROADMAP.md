@@ -1,45 +1,34 @@
 # Product Roadmap / 产品路线图
 
-This roadmap describes the intended evolution of Web & Game Engineer. Items are planning targets, not promises that a feature is already implemented or certified.
-
-本路线图描述 Web & Game Engineer 的计划演进方向。路线图条目属于规划目标，不代表功能已经实现或通过认证。
-
 ## Current baseline / 当前基线
-**Release:** 0.1.3-alpha · **Channel:** Experimental · **Platform certification:** No platform certified  
-**版本：** 0.1.3-alpha · **通道：** Experimental · **平台认证：** 暂无平台通过正式认证
 
-Six platform adapters are packaged in one GitHub Release with per-archive SHA-256 files. / 六个平台适配包集中在一个 GitHub Release 中，每个压缩包附 SHA-256 校验文件。
+**Release:** 0.2.0-alpha · **Channel:** Experimental · **Certification:** No platform certified.
 
-## Phase 1 — Foundation & consistency / 第一阶段：基础与一致性
-- Consolidate shared Core instructions and module boundaries. / 整理统一核心指令与模块边界。
-- Keep platform adapters independently versioned and documented. / 保持平台适配器独立版本与文档。
-- Improve bilingual documentation and installation clarity. / 完善双语文档与安装说明。
-- Maintain reproducible ZIP and checksum generation. / 维护可复现的 ZIP 与校验文件生成流程。
-- Keep the acceptance matrix honest and current. / 保持验收矩阵真实、及时。
+**版本：** 0.2.0-alpha · **通道：** Experimental · **认证：** 暂无平台通过正式认证。
 
-## Phase 2 — Verification & certification / 第二阶段：验证与认证
-- Execute installation checks for each host target. / 分别执行各宿主目标的安装检查。
-- Validate host capability detection and tool availability. / 验证宿主能力检测与工具可用性。
-- Run shared benchmarks across web, 2D, 3D, physics, legacy-project protection and delivery. / 对 Web、2D、3D、物理、旧项目保护与交付执行统一基准测试。
-- Record reproducible evidence and platform-specific limitations. / 记录可复现证据与平台限制。
-- Certify each platform independently only after its acceptance requirements pass. / 仅在满足验收要求后独立认证对应平台。
+The Core and all six platform entry points now specify One-Sentence Build Mode. The next major milestone is independent host execution and benchmark evidence—not a claim that every host already produces identical output.
 
-## Phase 3 — Engineering depth / 第三阶段：工程能力深化
-- Strengthen reusable project templates and state schemas. / 强化可复用项目模板与状态 Schema。
-- Expand 3D workbench workflows and asset pipelines. / 扩展 3D 工作台与资产流水线。
-- Improve physics, animation and AI gameplay workflow guidance. / 深化物理、动画与 AI 玩法工作流。
-- Improve automated regression and bounded self-repair patterns. / 改进自动回归与有限自修复模式。
-- Add performance budgets and profiling guidance. / 增加性能预算与分析指导。
+统一核心与六个平台入口现已纳入一句话构建模式。下一阶段重点是各宿主独立实测和基准证据，而不是宣称所有平台已经产生相同效果。
 
-## Phase 4 — Ecosystem & release maturity / 第四阶段：生态与发布成熟度
-- Improve cross-platform project handoff. / 改进跨平台项目交接。
-- Add adapter conformance checks as host capabilities evolve. / 随宿主能力变化增加适配器一致性检查。
-- Improve release notes, migration guidance and compatibility history. / 完善发布说明、迁移指南与兼容历史。
-- Establish a stable-release gate based on repeatable evidence. / 基于可复现证据建立稳定版发布门槛。
+## Phase 1 — One-sentence foundation / 第一阶段：一句话构建基础
+- Parse brief, infer safe defaults and minimize blocking questions. / 解析需求、补全安全默认项并减少无效追问。
+- Build complete runnable first releases/playable vertical slices. / 构建完整可运行首版/可玩垂直切片。
+- Establish website, 2D, 3D, workbench and touch standards. / 建立网站、2D、3D、工作台与触控标准。
+- Apply the evidence-based mid-to-upper-tier quality rubric. / 使用有证据的中上游质量评分体系。
 
-## Release principles / 发布原则
-1. No certification by implication. / 不通过暗示授予认证。
-2. No stable label without completed release gates. / 未完成发布门禁不标记 Stable。
-3. No destructive migration without explicit approval and rollback planning. / 未经明确批准与回滚规划不执行破坏性迁移。
-4. Quality and data integrity outrank feature count. / 质量与数据完整性高于功能数量。
-5. Update the roadmap when priorities or evidence change. / 优先级或验证证据变化时同步更新路线图。
+## Phase 2 — Cross-platform validation / 第二阶段：跨平台验证
+- Execute the shared one-sentence benchmark suite on all six hosts. / 在六个平台执行统一一句话基准。
+- Record generated artifacts, tool availability, test results and limitations. / 记录生成产物、工具能力、测试结果与限制。
+- Fix adapter-specific weaknesses independently. / 分别修复平台适配器弱项。
+- Keep certification status NOT CERTIFIED until evidence passes. / 证据通过前保持未认证状态。
+
+## Phase 3 — Higher production quality / 第三阶段：提升作品质量
+- Improve design systems, interaction feedback, game feel and content pacing. / 改进设计系统、交互反馈、游戏手感和内容节奏。
+- Expand procedural art, 3D environment and animation workflows. / 扩展程序化美术、3D 环境和动画流程。
+- Strengthen physics, AI gameplay, asset and level pipelines. / 强化物理、AI 玩法、资产与关卡流程。
+- Add repeatable visual, performance and regression benchmarks. / 增加可重复的视觉、性能和回归基准。
+
+## Phase 4 — Stable delivery / 第四阶段：稳定交付
+- Improve project continuity and handoff between AI platforms. / 改进跨 AI 平台项目连续性和交接。
+- Validate native host integrations and recovery paths. / 验证原生宿主集成与恢复路径。
+- Establish evidence-based stable-release gates. / 建立证据驱动的稳定版门禁。

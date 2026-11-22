@@ -1,7 +1,7 @@
 {
   "name": "web-game-engineer",
-  "version": "0.1.0-alpha",
-  "description": "Modular professional engineering workflow for websites, 2D/3D games, physics, animation, AI game logic, testing and delivery in Claude Code.",
+  "version": "0.2.0-alpha",
+  "description": "One-sentence professional workflow for complete websites and 2D/3D games, with engineering quality gates, testing and delivery in Claude Code.",
   "author": {
     "name": "Web & Game Engineer"
   },
@@ -10,6 +10,7 @@
   "keywords": [
     "web-development",
     "game-development",
+    "one-sentence-build",
     "threejs",
     "physics",
     "testing",
