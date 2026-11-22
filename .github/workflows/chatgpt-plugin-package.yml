@@ -1,0 +1,61 @@
+name: Build ChatGPT Plugin ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugin-distribution/chatgpt/**'
+      - '.github/workflows/chatgpt-plugin-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Build and verify plugin archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="0.1.3-alpha"
+          SRC="plugin-distribution/chatgpt"
+          OUT="dist/packages"
+          NAME="web-game-engineer-chatgpt-plugin-${VERSION}.zip"
+          mkdir -p "$OUT"
+          test -s "$SRC/plugin.json"
+          test -s "$SRC/skills/web-game-engineer/SKILL.md"
+          python - <<'PY'
+          import json
+          with open("plugin-distribution/chatgpt/plugin.json", encoding="utf-8") as f:
+              data = json.load(f)
+          assert data["name"] == "web-game-engineer"
+          assert data["version"] == "0.1.3-alpha"
+          assert "skills/web-game-engineer/SKILL.md" in data["skills"]
+          PY
+          rm -f "$OUT/$NAME"
+          (cd "$SRC" && zip -qr "../../$OUT/$NAME" plugin.json skills)
+          unzip -t "$OUT/$NAME"
+          unzip -Z1 "$OUT/$NAME" | grep -qx 'plugin.json'
+          unzip -Z1 "$OUT/$NAME" | grep -qx 'skills/web-game-engineer/SKILL.md'
+          (cd "$OUT" && sha256sum "$NAME" > "$NAME.sha256")
+
+      - name: Commit archive and checksum to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/packages/web-game-engineer-chatgpt-plugin-0.1.3-alpha.zip dist/packages/web-game-engineer-chatgpt-plugin-0.1.3-alpha.zip.sha256
+          if git diff --cached --quiet; then
+            echo "No archive changes."
+            exit 0
+          fi
+          git commit -m "Build ChatGPT plugin ZIP 0.1.3-alpha"
+          git push origin HEAD:main
