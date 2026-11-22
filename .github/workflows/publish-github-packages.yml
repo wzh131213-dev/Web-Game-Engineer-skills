@@ -101,8 +101,11 @@ jobs:
             # Public visibility is explicitly authorized by the repository owner.
             # GitHub's npm registry defaults newly published packages to private.
             encoded="%40wzh131213-dev%2Fweb-game-engineer-$slug"
-            gh api --method PATCH "/user/packages/npm/$encoded/visibility" -f visibility=public
-            echo "Published and requested public visibility: $slug@$version"
+            if gh api --method PATCH "/user/packages/npm/$encoded/visibility" -f visibility=public; then
+              echo "Public visibility confirmed by GitHub API: $slug@$version"
+            else
+              echo "::warning::Package published, but GITHUB_TOKEN cannot change granular package visibility. Set Public once in the package settings UI."
+            fi
           }
 
           publish_package chatgpt "$(jq -r '.package_version' packages/chatgpt/PACKAGE_MANIFEST.json)" "Web & Game Engineer adapter for ChatGPT" 'web-game-engineer-chatgpt-*.zip'
