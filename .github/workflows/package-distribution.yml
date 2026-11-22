@@ -1,0 +1,108 @@
+name: Build and publish skill ZIP packages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - 'release/VERSION.json'
+      - '.github/workflows/package-distribution.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Validate packages and build ZIPs
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          package_dirs=(packages/*/)
+          if [ "${#package_dirs[@]}" -eq 0 ]; then
+            echo "::error::No package directories found under packages/"
+            exit 1
+          fi
+
+          mkdir -p dist/packages
+          index="dist/packages/INDEX.md"
+          {
+            echo "# Downloadable Web & Game Engineer packages"
+            echo
+            echo "Generated automatically from the package sources on main."
+            echo
+            echo "| Package | Version | ZIP | SHA-256 |"
+            echo "|---|---|---|---|"
+          } > "$index"
+
+          for package_dir in "${package_dirs[@]}"; do
+            package_dir="${package_dir%/}"
+            manifest="$package_dir/PACKAGE_MANIFEST.json"
+            if [ ! -f "$manifest" ]; then
+              echo "::error::Missing $manifest. Every distributable skill must have a package manifest."
+              exit 1
+            fi
+
+            package_id="$(jq -r '.package_id // empty' "$manifest")"
+            package_version="$(jq -r '.package_version // empty' "$manifest")"
+            if [ -z "$package_id" ] || [ -z "$package_version" ]; then
+              echo "::error::package_id and package_version are required in $manifest"
+              exit 1
+            fi
+
+            while IFS= read -r relative_file; do
+              [ -n "$relative_file" ] || continue
+              if [ ! -f "$package_dir/$relative_file" ]; then
+                echo "::error::Manifest file missing: $package_dir/$relative_file"
+                exit 1
+              fi
+            done < <(jq -r '.files[]?' "$manifest")
+
+            archive="dist/packages/${package_id}-${package_version}.zip"
+            rm -f "$archive" "$archive.sha256"
+            zip -X -qr "$archive" "$package_dir"
+            unzip -t "$archive" >/dev/null
+            sha256sum "$archive" > "$archive.sha256"
+            printf '| %s | %s | [%s](%s) | [checksum](%s.sha256) |\n' \
+              "$package_id" "$package_version" "$(basename "$archive")" \
+              "$(basename "$archive")" "$(basename "$archive")" >> "$index"
+            echo "Built and validated $archive"
+          done
+
+          full_version="$(jq -r '.release // empty' release/VERSION.json)"
+          if [ -z "$full_version" ]; then
+            echo "::error::release field missing in release/VERSION.json"
+            exit 1
+          fi
+          full_archive="dist/packages/web-game-engineer-full-${full_version}.zip"
+          rm -f "$full_archive" "$full_archive.sha256"
+          zip -X -qr "$full_archive" README.md SKILL.md core modules team schemas adapters packages release .github/workflows
+          unzip -t "$full_archive" >/dev/null
+          sha256sum "$full_archive" > "$full_archive.sha256"
+          printf '| Full source bundle | %s | [%s](%s) | [checksum](%s.sha256) |\n' \
+            "$full_version" "$(basename "$full_archive")" "$(basename "$full_archive")" \
+            "$(basename "$full_archive")" >> "$index"
+
+      - name: Publish ZIPs and checksums to main
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/packages/
+          if git diff --cached --quiet; then
+            echo "No package archive changes to publish."
+            exit 0
+          fi
+          git commit -m "chore: publish skill package ZIPs [skip ci]"
+          git push origin HEAD:main
