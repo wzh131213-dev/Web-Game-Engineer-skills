@@ -110,9 +110,7 @@ jobs:
           unzip -Z1 "$claude_archive" | grep -Fxq '.claude-plugin/plugin.json'
           unzip -Z1 "$claude_archive" | grep -Fxq 'skills/web-game-engineer/SKILL.md'
           sha256sum "$claude_archive" > "$claude_archive.sha256"
-          printf '| Claude Code plugin | 0.1.0-alpha | [%s](%s) | [checksum](%s.sha256) |\\n' \\
-            "$(basename "$claude_archive")" "$(basename "$claude_archive")" \\
-            "$(basename "$claude_archive")" >> "$index"
+          echo '| Claude Code plugin | 0.1.0-alpha | [web-game-engineer-claude-plugin-0.1.0-alpha.zip](web-game-engineer-claude-plugin-0.1.0-alpha.zip) | [checksum](web-game-engineer-claude-plugin-0.1.0-alpha.zip.sha256) |' >> "$index"
 
       - name: Publish ZIPs and checksums to main
         shell: bash
