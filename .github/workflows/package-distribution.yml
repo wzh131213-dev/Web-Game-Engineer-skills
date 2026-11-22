@@ -4,8 +4,15 @@ on:
   push:
     branches: [main]
     paths:
+      - 'README.md'
+      - 'SKILL.md'
+      - 'core/**'
+      - 'modules/**'
+      - 'team/**'
+      - 'schemas/**'
+      - 'adapters/**'
       - 'packages/**'
-      - 'release/VERSION.json'
+      - 'release/**'
       - '.github/workflows/package-distribution.yml'
   workflow_dispatch:
 
