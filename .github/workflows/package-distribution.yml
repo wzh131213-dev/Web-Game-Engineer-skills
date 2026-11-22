@@ -84,6 +84,18 @@ jobs:
           printf '| Full source bundle | %s | [%s](%s) | [checksum](%s.sha256) |\n' "$FULL_VERSION" "$(basename "$full_archive")" "$(basename "$full_archive")" "$(basename "$full_archive")" >> "$index"
 
           PLATFORM_VERSION="$(jq -r '.release' release/VERSION.json)"
+          # ChatGPT plugin archive: plugin manifest and self-contained Skill at archive root.
+          root="plugin-distribution/chatgpt"
+          archive="dist/packages/web-game-engineer-chatgpt-plugin-${PLATFORM_VERSION}.zip"
+          test -f "$root/plugin.json" && test -f "$root/skills/web-game-engineer/SKILL.md"
+          rm -f "$archive" "$archive.sha256"
+          (cd "$root" && zip -X -qr "$GITHUB_WORKSPACE/$archive" plugin.json skills)
+          unzip -t "$archive" >/dev/null
+          unzip -Z1 "$archive" | grep -Fxq 'plugin.json'
+          unzip -Z1 "$archive" | grep -Fxq 'skills/web-game-engineer/SKILL.md'
+          sha256sum "$archive" > "$archive.sha256"
+          echo "| ChatGPT plugin | $PLATFORM_VERSION | [$(basename "$archive")]($(basename "$archive")) | [checksum]($(basename "$archive").sha256) |" >> "$index"
+
           # Claude Code plugin archive: plugin manifest and self-contained Skill at archive root.
           root="plugin-distribution/claude"
           archive="dist/packages/web-game-engineer-claude-plugin-${PLATFORM_VERSION}.zip"

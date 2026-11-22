@@ -1,6 +1,6 @@
 # Install — Doubao / 豆包
 
-**Version:** 0.1.0-alpha · **Status:** Experimental / NOT CERTIFIED
+**Version:** 0.2.0-alpha · **Status:** Experimental / NOT CERTIFIED
 
 ## Doubao chat app
 This is a portable instruction package, not a claim that the consumer Doubao app imports arbitrary Skill ZIPs.
@@ -32,3 +32,7 @@ Test a read-only task first. If using Ark API tools, ensure your backend actuall
 - Function calling is model decision output; external code must execute the function.
 - No API key, paid service, backend, native consumer-app Skill import or ArkClaw template is bundled.
 - **Actual host installation: NOT RUN. Certification: NOT CERTIFIED.**
+
+
+## One-sentence build
+Use one natural-language sentence to request a website/game. The Skill should build a complete runnable first version/playable vertical slice, use safe defaults, test available flows and report limitations. It does not guarantee AAA quality or grant missing host tools. Runtime certification remains NOT CERTIFIED.

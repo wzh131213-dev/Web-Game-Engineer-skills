@@ -33,7 +33,7 @@ jobs:
           for platform in "${platforms[@]}"; do
             archive="$(jq -r '.zip_archive' "packages/$platform/PACKAGE_MANIFEST.json")"
             test -s "$archive" && test -s "$archive.sha256"
-            (cd "$(dirname "$archive")" && sha256sum -c "$(basename "$archive").sha256")
+            sha256sum -c "$archive.sha256"
             unzip -t "$archive" >/dev/null
             printf '%s\n%s.sha256\n' "$archive" "$archive" >> "$RUNNER_TEMP/release-assets.txt"
           done

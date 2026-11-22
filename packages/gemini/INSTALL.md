@@ -1,6 +1,6 @@
 # Install — Gemini Apps
 
-**Version:** 0.1.0-alpha · **Status:** Experimental / NOT CERTIFIED
+**Version:** 0.2.0-alpha · **Status:** Experimental / NOT CERTIFIED
 
 ## Native Gemini Skills import
 This package is built as a Gemini Apps Skill archive: the ZIP root contains `SKILL.md`, which is the required main-folder entry.
@@ -8,7 +8,7 @@ This package is built as a Gemini Apps Skill archive: the ZIP root contains `SKI
 1. Open Gemini at https://gemini.google.com and sign in.
 2. Open the Skills area (typically Customize/Personalize → Skills; labels may vary by account).
 3. Choose Create → Upload.
-4. Select `web-game-engineer-gemini-skill-0.1.0-alpha.zip` from this package's download.
+4. Select `web-game-engineer-gemini-skill-0.2.0-alpha.zip` from this package's download.
 5. Review the imported instructions, then choose Create.
 6. Start a new chat and invoke `/web-game-engineer` or select the Skill where available. Also test whether Gemini automatically recognizes a matching task.
 
@@ -30,3 +30,7 @@ Ask Gemini to identify the Skill and version, explain its project-protection rul
 - Scripts that need external network access are not bundled; do not assume Skill text can execute code.
 - Gemini Apps installation and Gemini API integration are separate targets.
 - **Actual Gemini host installation: NOT RUN. Certification: NOT CERTIFIED.**
+
+
+## One-sentence build
+Use one natural-language sentence to request a website/game. The Skill should build a complete runnable first version/playable vertical slice, use safe defaults, test available flows and report limitations. It does not guarantee AAA quality or grant missing host tools. Runtime certification remains NOT CERTIFIED.

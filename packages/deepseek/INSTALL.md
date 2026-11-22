@@ -1,6 +1,6 @@
 # Install — DeepSeek
 
-**Version:** 0.1.0-alpha · **Status:** Experimental / NOT CERTIFIED
+**Version:** 0.2.0-alpha · **Status:** Experimental / NOT CERTIFIED
 
 ## DeepSeek web/app chat
 This ZIP is a portable instruction package, not a claimed native DeepSeek Skill/plugin archive.
@@ -31,3 +31,7 @@ First test a read-only file summary. Then test a small reversible edit in a disp
 - DeepSeek API capability does not prove the consumer chat app has the same tools.
 - Tool calls require a client/backend implementation; instructions cannot perform them on their own.
 - **Actual DeepSeek host installation: NOT RUN. Certification: NOT CERTIFIED.**
+
+
+## One-sentence build
+Use one natural-language sentence to request a website/game. The Skill should build a complete runnable first version/playable vertical slice, use safe defaults, test available flows and report limitations. It does not guarantee AAA quality or grant missing host tools. Runtime certification remains NOT CERTIFIED.
