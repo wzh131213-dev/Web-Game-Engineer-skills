@@ -1,30 +1,34 @@
 # Claude installation guide
 
-## Target: Claude Code
+This adapter provides two separate archives. Choose the one matching the Claude product you use.
 
-This package uses the Claude Code plugin layout. It is not a generic executable and does not install MCP servers or grant additional permissions.
+## A. Claude.ai — Agent Skills ZIP
 
-### Local plugin directory
+1. Download `web-game-engineer-claude-skill-0.1.0-alpha.zip`.
+2. In Claude.ai, open the Skills management/upload area if it is available for your account.
+3. Upload the ZIP as a custom Skill and enable it for a test conversation.
+4. Ask Claude to identify the Skill name and summarize its project-protection and testing rules.
+5. Test a small read-only task before giving it access to a real project.
 
-1. Download and extract the Claude plugin ZIP.
-2. Keep the extracted directory intact so `.claude-plugin/plugin.json` and `skills/web-game-engineer/SKILL.md` remain in their expected locations.
-3. From a terminal where Claude Code is installed, launch Claude Code with the extracted plugin directory using the supported local plugin development option: `claude --plugin-dir /path/to/extracted/plugin`.
-4. In Claude Code, confirm the plugin/skill is listed by the host and invoke the `web-game-engineer` skill for a small read-only task.
-5. Verify that it inspects the project before edits and reports unavailable tools honestly.
+The archive contains `web-game-engineer/SKILL.md`. Menu labels and feature availability can vary by account and workspace. If the Skills upload option is unavailable, use the manual fallback below. Do not claim installation succeeded until the host confirms it.
 
-The path above is a placeholder; replace it with the actual extracted directory. Do not paste credentials into the conversation.
+## B. Claude Code — Plugin ZIP
 
-### Claude.ai
+1. Download `web-game-engineer-claude-plugin-0.1.0-alpha.zip`.
+2. Extract it while preserving the `.claude-plugin/plugin.json` and `skills/web-game-engineer/SKILL.md` paths.
+3. From a terminal where Claude Code is installed, run `claude --plugin-dir /path/to/extracted/plugin`.
+4. Confirm the plugin loads and invoke its namespaced skill. The plugin name is `web-game-engineer`; Claude Code may expose the skill as `/web-game-engineer:web-game-engineer`.
+5. Run a read-only test first. Verify it uses only the tools actually available.
 
-This ZIP is a Claude Code plugin package, not a claim that Claude.ai can install Claude Code plugins. If the Claude.ai account exposes a Skills upload/import feature, use a separately prepared Skills-compatible archive and follow the exact format requested by that interface. Do not label Claude.ai installation successful based on Claude Code packaging.
+The path is a placeholder; replace it with the extracted directory. This local flag loads the plugin for that session and is a development/test route, not a permanent marketplace installation.
 
 ## Manual fallback
 
-If plugin installation is unavailable, open `skills/web-game-engineer/SKILL.md` and add its instructions to a supported Project/custom instruction workflow, if available. This is manual instruction use, not plugin installation.
+If neither host import route is available, open the included `SKILL.md` and use its instructions in a supported Project or custom-instruction workflow. This is manual instruction use, not plugin installation.
 
 ## Known limitations
 
+- Version: 0.1.0-alpha.
 - Status: Experimental / NOT CERTIFIED.
-- CI checks archive structure only; target-host installation and runtime are not yet verified.
-- Claude.ai Skills and Claude Code plugins are separate distribution targets.
-- MCP servers, terminal access, file access, and subagents depend on host configuration.
+- Claude.ai Skills upload and Claude Code plugin loading are independent and both remain unverified in a live host.
+- MCP servers, terminal access, filesystem access, and subagents depend on host configuration.
