@@ -1,0 +1,30 @@
+{
+  "adapter_id": "chatgpt",
+  "name": "ChatGPT",
+  "adapter_version": "0.1.1-alpha",
+  "core_version": "0.1.0-alpha",
+  "channel": "experimental",
+  "certification": "NOT CERTIFIED",
+  "supported_routes": [
+    "native-skills-if-visible-and-supported",
+    "project-instructions-and-knowledge-if-available",
+    "custom-gpt-instructions-and-knowledge-if-available",
+    "current-conversation-session-scoped"
+  ],
+  "target_surfaces": [
+    "ChatGPT web",
+    "ChatGPT app"
+  ],
+  "excluded_surfaces": [
+    "OpenAI API",
+    "third-party wrappers"
+  ],
+  "capability_detection_required": true,
+  "tests": {
+    "total": 12,
+    "passed": 0,
+    "failed": 0,
+    "not_run": 12
+  },
+  "last_verified": null
+}
