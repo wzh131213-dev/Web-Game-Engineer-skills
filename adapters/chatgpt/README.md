@@ -1,6 +1,6 @@
 # ChatGPT adapter
 
-<badge>Experimental / NOT CERTIFIED</badge>
+**Status: Experimental / NOT CERTIFIED**
 
 **Adapter version:** 0.1.1-alpha  
 **Core version:** 0.1.0-alpha  
