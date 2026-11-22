@@ -1,7 +1,7 @@
 {
   "adapter_id": "chatgpt",
   "name": "ChatGPT",
-  "adapter_version": "0.1.2-alpha",
+  "adapter_version": "0.1.3-alpha",
   "core_version": "0.1.0-alpha",
   "channel": "experimental",
   "certification": "NOT CERTIFIED",
@@ -29,7 +29,8 @@
   "last_verified": null,
   "distribution": {
     "source_directory": "packages/chatgpt",
-    "zip_archive": "NOT GENERATED",
-    "sha256": "NOT GENERATED"
+    "zip_archive": "dist/packages/web-game-engineer-chatgpt-0.1.3-alpha.zip",
+    "sha256": "dist/packages/web-game-engineer-chatgpt-0.1.3-alpha.zip.sha256",
+    "build_status": "GENERATED_VALIDATED"
   }
 }
