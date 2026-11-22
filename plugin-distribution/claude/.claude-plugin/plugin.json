@@ -1,0 +1,18 @@
+{
+  "name": "web-game-engineer",
+  "version": "0.1.0-alpha",
+  "description": "Modular professional engineering workflow for websites, 2D/3D games, physics, animation, AI game logic, testing and delivery in Claude Code.",
+  "author": {
+    "name": "Web & Game Engineer"
+  },
+  "repository": "https://github.com/wzh131213-dev/Web-Game-Engineer-skills",
+  "license": "MIT",
+  "keywords": [
+    "web-development",
+    "game-development",
+    "threejs",
+    "physics",
+    "testing",
+    "engineering"
+  ]
+}
