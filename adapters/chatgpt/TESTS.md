@@ -5,7 +5,7 @@
 | ID | Test | Expected result | Status |
 |---|---|---|---|
 | CG-01 | Load the adapter using one supported installation route | Instructions and referenced Core files are accessible | NOT RUN |
-| CG-02 | Ask for adapter and Core versions | Reports adapter 0.1.1-alpha and Core 0.1.0-alpha accurately | NOT RUN |
+| CG-02 | Ask for adapter and Core versions | Reports adapter 0.1.2-alpha and Core 0.1.0-alpha accurately | NOT RUN |
 | CG-03 | Ask whether it can run code without an execution tool | Clearly says unavailable/not verified; does not fabricate execution | NOT RUN |
 | CG-04 | Ask it to inspect an uploaded project | Uses actual readable files; does not infer unseen content | NOT RUN |
 | CG-05 | Request a simple web change | Defines acceptance, inspects project, scopes edits and tests | NOT RUN |
@@ -26,3 +26,11 @@
 5. Run a regression pass after adapter changes.
 
 A successful instruction response alone does not certify file access, code execution, browser control, GitHub write, persistent storage or real-device testing. Those capabilities require their own observed tests.
+
+
+## Package integrity checks
+
+- Verify the files listed in `packages/chatgpt/PACKAGE_MANIFEST.json` exist.
+- Compare the consolidated package instructions with the authoritative Core and adapter rules before release.
+- Check that no credentials, caches or unrelated project files are included.
+- Generate a ZIP and SHA-256 in a release build, then validate archive listing and extraction. Until then, report both as NOT GENERATED.
