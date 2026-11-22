@@ -12,6 +12,7 @@ on:
       - 'schemas/**'
       - 'adapters/**'
       - 'packages/**'
+      - 'plugin-distribution/**'
       - 'release/**'
       - '.github/workflows/package-distribution.yml'
   workflow_dispatch:
@@ -91,7 +92,7 @@ jobs:
           fi
           full_archive="dist/packages/web-game-engineer-full-${full_version}.zip"
           rm -f "$full_archive" "$full_archive.sha256"
-          zip -X -qr "$full_archive" README.md SKILL.md core modules team schemas adapters packages release .github/workflows
+          zip -X -qr "$full_archive" README.md SKILL.md core modules team schemas adapters packages plugin-distribution release .github/workflows
           unzip -t "$full_archive" >/dev/null
           sha256sum "$full_archive" > "$full_archive.sha256"
           printf '| Full source bundle | %s | [%s](%s) | [checksum](%s.sha256) |\n' \
