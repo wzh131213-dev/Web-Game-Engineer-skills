@@ -12,6 +12,15 @@
     "qwen": "0.1.0-alpha",
     "doubao": "0.1.0-alpha"
   },
+  "targets": {
+    "gemini-apps-skills": "0.1.0-alpha",
+    "deepseek-chat-prompt": "0.1.0-alpha",
+    "deepseek-api-system-instructions": "0.1.0-alpha",
+    "qwen-code-skills": "0.1.0-alpha",
+    "qwen-model-studio-agent-skills": "0.1.0-alpha",
+    "doubao-chat-prompt": "0.1.0-alpha",
+    "volcengine-ark-api": "0.1.0-alpha"
+  },
   "certification_status": {
     "chatgpt": "NOT CERTIFIED",
     "claude": "NOT CERTIFIED",
