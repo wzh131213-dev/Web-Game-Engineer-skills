@@ -15,6 +15,23 @@ Every installable platform adapter has its own matching ZIP and SHA-256 checksum
 - **Qwen:** [Qwen adapter](packages/qwen/) · separate Qwen Code Agent Skill and Alibaba Cloud Model Studio Agent Skill archives · Experimental / NOT CERTIFIED.
 - **Doubao:** [portable prompt/Volcengine Ark adapter](packages/doubao/) · consumer chat prompt and Ark API system-message routes are separate · Experimental / NOT CERTIFIED.
 
+
+## GitHub Packages (npm Registry)
+
+The publishing workflow creates one npm package per platform adapter plus a full-source package:
+
+| Package | GitHub Packages page |
+|---|---|
+| ChatGPT | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-chatgpt |
+| Claude | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-claude |
+| Gemini | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-gemini |
+| DeepSeek | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-deepseek |
+| Qwen | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-qwen |
+| Doubao | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-doubao |
+| Full source | https://github.com/users/wzh131213-dev/packages/npm/package/web-game-engineer-full |
+
+The workflow publishes with the repository-scoped `GITHUB_TOKEN`. GitHub creates personal-account npm packages as **Private** by default; if the workflow token cannot change package visibility, open each package page, select **Package settings → Danger Zone → Change visibility → Public**, and confirm. Public visibility cannot be reversed to Private. GitHub's npm registry may still require authentication for npm CLI access even when a package is Public; the raw ZIP downloads in [dist/packages](dist/packages/) remain the simplest public download route.
+
 ## Start
 1. Read root `SKILL.md` for the shared Core.
 2. Read the relevant platform adapter's `INSTALL.md` and `PLATFORM_CAPABILITIES.md`.
