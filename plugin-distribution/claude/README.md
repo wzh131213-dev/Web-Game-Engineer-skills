@@ -1,20 +1,17 @@
-# Web & Game Engineer — Claude Plugin
+# Web & Game Engineer — Claude
 
 **Version:** 0.1.0-alpha  
-**Status:** Experimental / NOT CERTIFIED  
-**Target:** Claude Code plugin format. Claude.ai Skills upload is a separate host workflow and is not implied by this plugin package.
+**Status:** Experimental / NOT CERTIFIED.
 
-This directory is the canonical source for the Claude Code plugin ZIP. The archive root contains:
+This source contains two separate Claude distribution targets:
 
-- `.claude-plugin/plugin.json`
-- `skills/web-game-engineer/SKILL.md`
+1. **Claude Code plugin** — `.claude-plugin/plugin.json` plus `skills/web-game-engineer/SKILL.md`.
+2. **Claude.ai Agent Skill** — a ZIP containing `web-game-engineer/SKILL.md` for the Skills upload/import workflow, when available in the account.
 
-The skill provides a modular engineering workflow for web apps, 2D/3D games, physics, animation, AI game logic, testing, repair, and delivery. It does not grant terminal, file, MCP, network, or Git permissions; Claude only uses capabilities available in the active environment.
+These are separate host formats and must be installed and certified independently. Neither package grants terminal, filesystem, MCP, network, or Git permissions. Claude only uses capabilities available in the active environment.
 
-## Local validation
-
-From the repository root, validate the manifest JSON and required skill file. Then build the ZIP using the repository GitHub Actions workflow or the documented local packaging steps.
+The central GitHub Actions workflow generates both ZIPs, validates their required paths, creates SHA-256 sidecars, and adds both download links to `dist/packages/INDEX.md`.
 
 ## Compatibility status
 
-The archive layout is structurally validated by CI. Installation and runtime behavior must still be verified in the target Claude Code environment. Claude.ai Skills import, Claude Code plugin installation, and MCP integration are separate compatibility targets.
+CI validates the archive structure only. Actual Claude.ai upload, Claude Code plugin loading, and runtime behavior remain NOT RUN until tested in the respective host.
